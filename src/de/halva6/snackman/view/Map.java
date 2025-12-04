@@ -1,38 +1,36 @@
 package de.halva6.snackman.view;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import de.halva6.snackman.controller.Controller;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 public class Map
 {
-	private Image[] tiles;
+	private String [] tilePaths;
 	
-	public Map(String ...graphicPaths) throws FileNotFoundException 
+	public Map(String ...tilePaths) 
 	{
-		tiles = new Image[graphicPaths.length];
-		
-		for(int i = 0; i < graphicPaths.length; i++) 
-		{
-			tiles[i] = new Image(new FileInputStream(graphicPaths[i]));
-		}
+		this.tilePaths = tilePaths;
 	}
 	
-	public void renderMap(GraphicsContext gc, int[][] map) 
+	public ArrayList<Sprite> renderMap(int[][] map) throws FileNotFoundException 
 	{
+		ArrayList<Sprite> tileMapSprites = new ArrayList<Sprite>();
 	    for (int y = 0; y < map.length; y++) {
 	        for (int x = 0; x < map[y].length; x++) {
 
 	            int tileId = map[y][x];
-	            Image tile = tiles[tileId];
+	            Sprite tile = new Sprite(tilePaths[tileId]);
 	            
-	            double diffSize = (Controller.SPRITE_SIZE - tile.getHeight()) / 2;
-
-	            gc.drawImage(tile, x * Controller.SPRITE_SIZE + diffSize, y * Controller.SPRITE_SIZE + diffSize);
+	            double diffSize = (Controller.SPRITE_SIZE - tile.getSize()) / 2;
+	            double xPos = x * Controller.SPRITE_SIZE + diffSize;
+	            double yPos = y * Controller.SPRITE_SIZE + diffSize;
+	            tile.setPos(new double[] {xPos, yPos});
+	            
+	            tileMapSprites.add(tile);
 	        }
-	    }		
+	    }
+	    return tileMapSprites;
 	}
 }
