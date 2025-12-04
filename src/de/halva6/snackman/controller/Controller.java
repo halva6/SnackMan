@@ -5,14 +5,15 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Controller extends Application
 {
 	
-	private static final int WIDTH = 16;
-	private static final int HEIGHT = 16;
-	private static final int SPRITE_SIZE = 50;
+	public static final int WIDTH = 16;
+	public static final int HEIGHT = 16;
+	public static final int SPRITE_SIZE = 50;
 
 	@Override
 	public void start(Stage stage)
@@ -20,7 +21,7 @@ public class Controller extends Application
 		Input input = new Input();
 		
 		Group root = new Group();
-		Scene gameScene = new Scene(root, WIDTH * SPRITE_SIZE, HEIGHT * SPRITE_SIZE);
+		Scene gameScene = new Scene(root, WIDTH * SPRITE_SIZE, HEIGHT * SPRITE_SIZE, Color.BLACK);
 		gameScene.setOnKeyPressed(input.getEvent());
 		gameScene.setOnKeyReleased(input.getEvent());
 
@@ -30,7 +31,7 @@ public class Controller extends Application
 		root.getChildren().add(canvas);
 		
 		@SuppressWarnings("unused")
-		GameLoop gameLoop = new GameLoop(input);
+		GameLoop gameLoop = new GameLoop(input, canvas);
 		
 		
 		stage.setTitle("SnackMan");

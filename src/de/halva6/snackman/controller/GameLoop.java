@@ -1,15 +1,27 @@
 package de.halva6.snackman.controller;
 
+import java.io.FileNotFoundException;
+
+import de.halva6.snackman.model.GenerateMap;
 import de.halva6.snackman.view.Input;
+import de.halva6.snackman.view.Map;
 import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 public class GameLoop
 {
 	private long lastUpdate = 0;
 	private Input input;
+	private GraphicsContext gc;
 
-	public GameLoop(Input input)
+	public GameLoop(Input input, Canvas canvas)
 	{
+		this.input = input;
+		this.gc = canvas.getGraphicsContext2D();
+
+		start();
+		
 		AnimationTimer timer = new AnimationTimer()
 		{
 			@Override
@@ -25,12 +37,24 @@ public class GameLoop
 			}
 		};
 		timer.start();
-		
-		this.input = input;
+	}
+	
+	private void start() 
+	{
+		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT);
+		try
+		{
+			Map map = new Map("res/border.png", "res/dot.png");
+			map.renderMap(gc, gm.getMap());
+		} catch (FileNotFoundException e)
+		{
+			System.err.println("[Error] rendering the tilemap: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	private void updateGame(double deltaTime)
 	{
-		System.out.println(this.input.isDown());
+		
 	}
 }
