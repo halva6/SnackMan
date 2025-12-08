@@ -3,7 +3,6 @@ package de.halva6.snackman.view;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import de.halva6.snackman.controller.Controller;
 
 public class Map
 {
@@ -21,12 +20,7 @@ public class Map
 	        for (int x = 0; x < map[y].length; x++) {
 
 	            int tileId = map[y][x];
-	            Sprite tile = new Sprite(tilePaths[tileId]);
-	            
-	            double diffSize = (Controller.SPRITE_SIZE - tile.getSize()) / 2;
-	            double xPos = x * Controller.SPRITE_SIZE + diffSize;
-	            double yPos = y * Controller.SPRITE_SIZE + diffSize;
-	            tile.setPos(new double[] {xPos, yPos});
+	            Sprite tile = new Sprite(tilePaths[tileId], x, y);
 	            
 	            tileMapSprites.add(tile);
 	        }

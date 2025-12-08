@@ -36,6 +36,18 @@ public class Input
 				case KeyCode.D:
 					right = keyCode;
 					break;
+				case KeyCode.UP:
+					up = keyCode;
+					break;
+				case KeyCode.DOWN:
+					down = keyCode;
+					break;
+				case KeyCode.LEFT:
+					left = keyCode;
+					break;
+				case KeyCode.RIGHT:
+					right = keyCode;
+					break;
 				default:
 					break;
 				}

@@ -1,42 +1,46 @@
 package de.halva6.snackman.model;
 
-public class Entity
+import de.halva6.snackman.controller.Controller;
+
+public abstract class Entity
 {
-	private double posX, posY;
-	private final double speed = 100;
+	protected int p_x, p_y;
+	protected int speed_x = 0;
+	protected int speed_y = 0;
+	protected Direction reqDirection;
+	protected Direction entityDirection;
 	
-	public Entity(double startX, double startY) 
+	protected final int[][] map;
+	
+	public Entity(int m_x, int m_y, Direction movingDirection, int[][] map)
 	{
-		this.posX = startX;
-		this.posY = startY;
+		this.p_x = m_x * Controller.SPRITE_SIZE;
+		this.p_y = m_y * Controller.SPRITE_SIZE;
+
+		this.entityDirection = movingDirection;
+		this.reqDirection = movingDirection;
+		this.map = map;
 	}
 	
-	public double[] up(double deltaTime) 
-	{
-		posY -= speed * deltaTime;
-		return new double[]{posX,posY};
-	}
+	public abstract void move();
 	
-	public double[] down(double deltaTime) 
+	public double getPosX()
 	{
-		posY += speed * deltaTime;
-		return new double[]{posX,posY};
+		return p_x;
 	}
-	
-	public double[] left(double deltaTime) 
+
+	public double getPosY()
 	{
-		posX -= speed * deltaTime;
-		return new double[]{posX,posY};
+		return p_y;
 	}
-	
-	public double[] right(double deltaTime) 
+
+	public Direction getEntitiyDirection()
 	{
-		posX += speed * deltaTime;
-		return new double[]{posX,posY};
+		return entityDirection;
 	}
-	
-	public double[] getInitPos()
+
+	public void setReqDirection(Direction reqDirection)
 	{
-		return new double[]{posX,posY};
+		this.reqDirection = reqDirection;
 	}
 }
