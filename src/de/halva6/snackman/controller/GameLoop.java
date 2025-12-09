@@ -111,16 +111,16 @@ public class GameLoop
 		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT);
 		try
 		{
-			Map map = new Map("res/border.png", "res/dot.png");
+			Map map = new Map();
 			this.tileMapSprites = map.initMap(gm.getMap());
 			this.dotCount = map.getDotCount();
-			this.player = new MovingSprite("res/pacman.png", 1, 1);
+			this.player = new MovingSprite("res/img/pacman.png", 1, 1);
 			this.playerE = new EntityPlayer(1, 1, Direction.DOWN, gm.getMap());
 
 			for (int i = 0; i < this.enemyNumber; i++)
 			{
-				MovingSprite e = new MovingSprite("res/ghost.png", 14, 14);
-				EntityEnemy ee = new EntityEnemy(7, 7, gm.getMap());
+				MovingSprite e = new MovingSprite("res/img/ghost.png", 9, 13);
+				EntityEnemy ee = new EntityEnemy(9, 13, gm.getMap());
 
 				this.enemys.add(e);
 				this.enemeyE.add(ee);
@@ -130,6 +130,7 @@ public class GameLoop
 		{
 			System.err.println("[Error] rendering the tilemap: " + e.getMessage());
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -223,15 +224,19 @@ public class GameLoop
 			Sprite tile = tileMapSprites.get(i);
 			// if the id of the tile is dot -> checks only dots because it is better for the
 			// performance
-			if (tile.getId().contains("dot"))
+			
+			if (tile.getId().contains("food"))
 			{
 				if (tile.collideSprite(player))
 				{
+					
+					String idSplit[] = tile.getId().split("-");
+															
 					// increase the score
-					scoreCount += 100;
-
+					scoreCount += Integer.valueOf(idSplit[0]) * 5;
+					
 					// decrease the dotCount -> this represents the number of all available dots ->
-					// if there are no dots anymore, the game ist over an the player won
+					// if there are no dots anymore, the game is over an the player won
 					dotCount--;
 
 					// removes the dot from the tile map -> will not be rendered anymore
@@ -250,5 +255,4 @@ public class GameLoop
 
 		}
 	}
-
 }

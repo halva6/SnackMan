@@ -3,6 +3,7 @@ package de.halva6.snackman.model;
 import java.util.Random;
 
 import de.halva6.snackman.controller.Controller;
+import de.halva6.snackman.view.Map;
 
 public class EntityEnemy extends Entity
 {
@@ -28,8 +29,8 @@ public class EntityEnemy extends Entity
 		{
 			m_x = (int) this.p_x / Controller.SPRITE_SIZE;
 			m_y = (int) this.p_y / Controller.SPRITE_SIZE;
-			if ((map[m_y - 1][m_x] == 0 && map[m_y + 1][m_x] == 0)
-					|| (map[m_y][m_x - 1] == 0 && map[m_y][m_x + 1] == 0))
+			if ((map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER)
+					|| (map[m_y][m_x - 1] < Map.SNACK_NUMBER && map[m_y][m_x + 1] < Map.SNACK_NUMBER))
 			{
 				tunnel = true;
 			}
@@ -71,16 +72,20 @@ public class EntityEnemy extends Entity
 
 	private Direction deadEndDirection()
 	{
-		if (map[m_y - 1][m_x] == 0 && map[m_y + 1][m_x] == 0 && map[m_y][m_x - 1] == 0)
+		if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER
+				&& map[m_y][m_x - 1] < Map.SNACK_NUMBER)
 		{
 			return Direction.RIGHT;
-		} else if (map[m_y - 1][m_x] == 0 && map[m_y + 1][m_x] == 0 && map[m_y][m_x + 1] == 0)
+		} else if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER
+				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
 		{
 			return Direction.LEFT;
-		} else if (map[m_y + 1][m_x] == 0 && map[m_y][m_x - 1] == 0 && map[m_y][m_x + 1] == 0)
+		} else if (map[m_y + 1][m_x] < Map.SNACK_NUMBER && map[m_y][m_x - 1] < Map.SNACK_NUMBER
+				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
 		{
 			return Direction.UP;
-		} else if (map[m_y - 1][m_x] == 0 && map[m_y][m_x - 1] == 0 && map[m_y][m_x + 1] == 0)
+		} else if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y][m_x - 1] < Map.SNACK_NUMBER
+				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
 		{
 			return Direction.DOWN;
 		}

@@ -1,6 +1,7 @@
 package de.halva6.snackman.model;
 
 import de.halva6.snackman.controller.Controller;
+import de.halva6.snackman.view.Map;
 
 public abstract class Entity
 {
@@ -30,7 +31,7 @@ public abstract class Entity
 		return p_x;
 	}
 
-	public double getPosY()	
+	public double getPosY()
 	{
 		return p_y;
 	}
@@ -51,16 +52,16 @@ public abstract class Entity
 		switch (d)
 		{
 		case Direction.UP:
-			c = map[m_y - 1][m_x] == 0;
+			c = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
 			break;
 		case Direction.DOWN:
-			c = map[m_y + 1][m_x] == 0;
+			c = map[m_y + 1][m_x] < Map.SNACK_NUMBER;
 			break;
 		case Direction.LEFT:
-			c = map[m_y][m_x - 1] == 0;
+			c = map[m_y][m_x - 1] < Map.SNACK_NUMBER;
 			break;
 		case Direction.RIGHT:
-			c = map[m_y][m_x + 1] == 0;
+			c = map[m_y][m_x + 1] < Map.SNACK_NUMBER;
 			break;
 		}
 

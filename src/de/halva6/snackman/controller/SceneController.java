@@ -17,8 +17,8 @@ import javafx.stage.Stage;
 
 public class SceneController
 {
-	public static final String startScreenFXMLPath = "res/StartScreen.fxml";
-	public static final String gameOverFXMLPath = "res/GameOverScreen.fxml";
+	public static final String startScreenFXMLPath = "res/fxml/StartScreen.fxml";
+	public static final String gameOverFXMLPath = "res/fxml/GameOverScreen.fxml";
 
 	public static void gameScene(Node sourceNode)
 	{

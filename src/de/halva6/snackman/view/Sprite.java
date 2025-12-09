@@ -27,6 +27,19 @@ public class Sprite
 		this.xPos = m_x * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
 		this.yPos = m_y * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
 	}
+	
+	public Sprite(String path,  String id, int m_x, int m_y) throws FileNotFoundException
+	{
+		this.image = new Image(new FileInputStream(path));
+		this.id = id;
+		this.m_x = m_x;
+		this.m_y = m_y;
+
+//      double diffSize = (Controller.SPRITE_SIZE - getSize()) / 2;
+		this.xPos = m_x * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
+		this.yPos = m_y * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
+	}
+
 
 	public void renderSprite(GraphicsContext gc)
 	{

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class GenerateMap
 {
-	private static final String filePath = "res/map.csv";
+	private static final String FILE_PATH = "res/level/Level1.csv";
 	private int[][] map;
 
 	public GenerateMap(int width, int height)
@@ -18,7 +18,7 @@ public class GenerateMap
 
 	private void initMap()
 	{
-		try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
+		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH)))
 		{
 			String line;
 			int i = 0;

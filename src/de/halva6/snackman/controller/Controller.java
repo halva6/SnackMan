@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 public class Controller extends Application
 {
 
-	public static final int WIDTH = 16;
-	public static final int HEIGHT = 16;
-	public static final int SPRITE_SIZE = 50;
+	public static final int WIDTH = 25;
+	public static final int HEIGHT = 25;
+	public static final int SPRITE_SIZE = 32;
 	public static final int SCORE_HEIGHT = 30;
 
 	@Override
