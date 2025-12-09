@@ -34,9 +34,9 @@ public class EntityEnemy extends Entity
 				tunnel = true;
 			}
 
-			frontWall = collision(entityDirection);
+			frontWall = wallCollision(entityDirection);
 
-			wall = collision(reqDirection);
+			wall = wallCollision(reqDirection);
 
 			if (!wall && !tunnel)
 			{

@@ -10,6 +10,7 @@ import de.halva6.snackman.model.GenerateMap;
 import de.halva6.snackman.view.Input;
 import de.halva6.snackman.view.Map;
 import de.halva6.snackman.view.MovingSprite;
+import de.halva6.snackman.view.Score;
 import de.halva6.snackman.view.Sprite;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -33,11 +34,15 @@ public class GameLoop
 	private ArrayList<MovingSprite> enemys = new ArrayList<MovingSprite>();
 	private ArrayList<EntityEnemy> enemeyE = new ArrayList<EntityEnemy>();
 	private final int enemyNumber = 3;
+	
+	private int scoreCount = 0;
+	private Score score;
 
 	public GameLoop(Input input, Canvas canvas)
 	{
 		this.input = input;
 		this.gc = canvas.getGraphicsContext2D();
+		this.score = new Score(gc);
 
 		awake();
 
@@ -68,6 +73,7 @@ public class GameLoop
 		timer.start();
 	}
 
+	//executes all before the first frame will be rendered
 	private void awake()
 	{
 		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT);
@@ -94,6 +100,8 @@ public class GameLoop
 		}
 	}
 
+	//It updates at regular intervals. 
+	//It is independent of the frame rate because the frame rate always varies depending on how many resources the process currently requires.
 	private void fixedUpdate()
 	{
 		playerE.move();
@@ -107,8 +115,10 @@ public class GameLoop
 		}
 	}
 
+	//updates every frame
 	private void updateGame(double deltaTime)
 	{
+		// assigning keyboard input to the corresponding directions
 		if (input.isUp())
 		{
 			playerE.setReqDirection(Direction.UP);
@@ -123,8 +133,10 @@ public class GameLoop
 			playerE.setReqDirection(Direction.RIGHT);
 		}
 
+		// move the player sprite
 		player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection().getAngle());
 
+		// move the enemies
 		if (enemyNumber > 0)
 		{
 			for (int i = 0; i < this.enemyNumber; i++)
@@ -136,23 +148,64 @@ public class GameLoop
 			}
 		}
 
+		manageCollision();
 		render();
 	}
 
 	private void render()
 	{
-		gc.clearRect(0, 0, Controller.WIDTH * Controller.SPRITE_SIZE, Controller.HEIGHT * Controller.SPRITE_SIZE);
+		//resets the canvas (if not, all moving sprites would be duplicated)
+		gc.clearRect(0, 0, Controller.WIDTH * Controller.SPRITE_SIZE, Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
+		
+		//render all tiles of the tile map
 		for (Sprite tileSprite : tileMapSprites)
 		{
 			tileSprite.renderSprite(gc);
 		}
+		
+		//render the player
 		this.player.renderSprite(gc);
 
+		//render all enemies
 		for (MovingSprite e : this.enemys)
 		{
 			e.renderSprite(gc);
 		}
+		
+		//render the score text
+		score.renderText(gc, "Score: " + this.scoreCount);
+	}
 
+	//collision detection with the enemies and the dots
+	private void manageCollision()
+	{
+		//checks all dots
+		for (int i = 0; i < tileMapSprites.size(); i++)
+		{
+			Sprite tile = tileMapSprites.get(i);
+			//if the id of the tile is dot -> checks only dots because it is better for the performance
+			if (tile.getId().contains("dot"))
+			{
+				if (tile.collideSprite(player))
+				{
+					//increase the score
+					scoreCount += 100;
+					
+					//removes the dot from the tile map -> will not be rendered anymore
+					tileMapSprites.remove(i);
+				}
+			}
+		}
+
+		//checks all enemies
+		for (int i = 0; i < enemys.size(); i++)
+		{
+			if (enemys.get(i).collideSprite(player))
+			{
+				timer.stop();
+			}
+
+		}
 	}
 
 }

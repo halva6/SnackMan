@@ -30,7 +30,7 @@ public abstract class Entity
 		return p_x;
 	}
 
-	public double getPosY()
+	public double getPosY()	
 	{
 		return p_y;
 	}
@@ -45,7 +45,7 @@ public abstract class Entity
 		this.reqDirection = reqDirection;
 	}
 
-	protected boolean collision(Direction d)
+	protected boolean wallCollision(Direction d)
 	{
 		boolean c = false;
 		switch (d)

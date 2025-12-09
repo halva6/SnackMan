@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import de.halva6.snackman.controller.Controller;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -21,7 +22,7 @@ public class Sprite
 
 		this.m_x = m_x;
 		this.m_y = m_y;
-		
+
 //      double diffSize = (Controller.SPRITE_SIZE - getSize()) / 2;
 		this.xPos = m_x * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
 		this.yPos = m_y * Controller.SPRITE_SIZE + (Controller.SPRITE_SIZE - getSize()) / 2;
@@ -51,6 +52,16 @@ public class Sprite
 	public int getM_y()
 	{
 		return m_y;
+	}
+
+	public Rectangle2D getRect()
+	{
+		return new Rectangle2D(xPos, yPos, image.getWidth(), image.getHeight());
+	}
+
+	public boolean collideSprite(Sprite otherSprite)
+	{
+		return this.getRect().intersects(otherSprite.getRect());
 	}
 
 }

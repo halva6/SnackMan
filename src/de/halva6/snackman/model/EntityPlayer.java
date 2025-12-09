@@ -32,11 +32,11 @@ public class EntityPlayer extends Entity
 
 			//it checks if there is a wall in front of the player (in the direction of movement) 
 			//if so, the speed is later set to 0
-			frontWall = collision(entityDirection);
+			frontWall = wallCollision(entityDirection);
 
 			//it checks whether there is an obstacle in the desired direction; 
 			//if so, the desired direction does not become the entity direction
-			wall = collision(reqDirection);
+			wall = wallCollision(reqDirection);
 
 			if (!wall)
 			{
