@@ -17,15 +17,13 @@ public class Controller extends Application
 	public static final int SPRITE_SIZE = 50;
 	public static final int SCORE_HEIGHT = 30;
 
-	public static final String startScreenFXMLPath = "res/StartScreen.fxml";
-
 	@Override
 	public void start(Stage stage)
 	{
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader();
-			FileInputStream fxmlStream = new FileInputStream(startScreenFXMLPath);
+			FileInputStream fxmlStream = new FileInputStream(SceneController.startScreenFXMLPath);
 
 			Pane root = fxmlLoader.load(fxmlStream);
 			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,

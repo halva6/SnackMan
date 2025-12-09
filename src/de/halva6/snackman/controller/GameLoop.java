@@ -1,8 +1,6 @@
 package de.halva6.snackman.controller;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import de.halva6.snackman.model.Direction;
@@ -16,12 +14,8 @@ import de.halva6.snackman.view.Score;
 import de.halva6.snackman.view.Sprite;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 public class GameLoop
 {
@@ -46,7 +40,7 @@ public class GameLoop
 	private Score score;
 	private int dotCount = 0;
 
-	private boolean gameOver = false;
+	private boolean gameOver, win = false;
 
 	public GameLoop(Input input, Canvas canvas)
 	{
@@ -85,7 +79,7 @@ public class GameLoop
 					Platform.runLater(() -> {
 						try
 						{
-							switchToMainMenu();
+							gameOver();
 						} catch (Exception e)
 						{
 							e.printStackTrace();
@@ -97,21 +91,18 @@ public class GameLoop
 		timer.start();
 	}
 
-	private void switchToMainMenu() throws IOException
+	private void gameOver()
 	{
-
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			FileInputStream fxmlStream = new FileInputStream(Controller.startScreenFXMLPath);
-
-			Pane root = fxmlLoader.load(fxmlStream);
-			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
-					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
-
-			Stage stage = (Stage) gc.getCanvas().getScene().getWindow(); // gameRoot = Root-Node vom Spiel
-			stage.setScene(scene);
-			stage.show();
-
-
+		String status;
+		String points = "" + dotCount;
+		if (win)
+		{
+			status = "You won the game";
+		} else
+		{
+			status = "You lost the game";
+		}
+		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.gameOverFXMLPath, status, points);
 	}
 
 	// executes all before the first frame will be rendered
@@ -129,7 +120,7 @@ public class GameLoop
 			for (int i = 0; i < this.enemyNumber; i++)
 			{
 				MovingSprite e = new MovingSprite("res/ghost.png", 14, 14);
-				EntityEnemy ee = new EntityEnemy(14, 14, gm.getMap());
+				EntityEnemy ee = new EntityEnemy(7, 7, gm.getMap());
 
 				this.enemys.add(e);
 				this.enemeyE.add(ee);
@@ -222,6 +213,7 @@ public class GameLoop
 	{
 		if (dotCount == 0)
 		{
+			win = true;
 			gameOver = true;
 		}
 

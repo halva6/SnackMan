@@ -38,14 +38,14 @@ public class EntityEnemy extends Entity
 
 			wall = wallCollision(reqDirection);
 
+			if (tunnel && frontWall)
+			{
+				entityDirection = deadEndDirection();
+			}
+
 			if (!wall && !tunnel)
 			{
 				entityDirection = reqDirection;
-			}
-
-			if (tunnel && frontWall)
-			{
-				entityDirection = getOppsiteDirection(entityDirection);
 			}
 
 		}
@@ -54,7 +54,7 @@ public class EntityEnemy extends Entity
 		if (!frontWall)
 		{
 			setSpeedInDirection(entityDirection);
-		}else 
+		} else
 		{
 			speed_x = 0;
 			speed_y = 0;
@@ -69,27 +69,23 @@ public class EntityEnemy extends Entity
 		return Direction.values()[r];
 	}
 
-	private Direction getOppsiteDirection(Direction d)
+	private Direction deadEndDirection()
 	{
-		switch (d)
+		if (map[m_y - 1][m_x] == 0 && map[m_y + 1][m_x] == 0 && map[m_y][m_x - 1] == 0)
 		{
-		case Direction.UP:
-			entityDirection = Direction.DOWN;
-			break;
-		case Direction.DOWN:
-			entityDirection = Direction.UP;
-			break;
-		case Direction.LEFT:
-			entityDirection = Direction.RIGHT;
-			break;
-		case Direction.RIGHT:
-			entityDirection = Direction.LEFT;
-			break;
+			return Direction.RIGHT;
+		} else if (map[m_y - 1][m_x] == 0 && map[m_y + 1][m_x] == 0 && map[m_y][m_x + 1] == 0)
+		{
+			return Direction.LEFT;
+		} else if (map[m_y + 1][m_x] == 0 && map[m_y][m_x - 1] == 0 && map[m_y][m_x + 1] == 0)
+		{
+			return Direction.UP;
+		} else if (map[m_y - 1][m_x] == 0 && map[m_y][m_x - 1] == 0 && map[m_y][m_x + 1] == 0)
+		{
+			return Direction.DOWN;
 		}
-		return d;
-	}
 
-	// The idea is that the opponent simply picks a randomly available coordinate
-	// and then tries to move there as quickly as possible.
+		return null;
+	}
 
 }
