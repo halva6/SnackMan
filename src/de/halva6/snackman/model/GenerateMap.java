@@ -1,13 +1,13 @@
 package de.halva6.snackman.model;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class GenerateMap
 {
-	private static final String FILE_PATH = "res/level/Level1.csv";
+	private static final String FILE_PATH = "/level/Level1.csv";
 	private int[][] map;
 
 	public GenerateMap(int width, int height)
@@ -18,7 +18,7 @@ public class GenerateMap
 
 	private void initMap()
 	{
-		try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH)))
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(FILE_PATH))))
 		{
 			String line;
 			int i = 0;

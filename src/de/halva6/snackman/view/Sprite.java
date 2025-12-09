@@ -1,6 +1,5 @@
 package de.halva6.snackman.view;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import de.halva6.snackman.controller.Controller;
@@ -17,7 +16,7 @@ public class Sprite
 
 	public Sprite(String path, int m_x, int m_y) throws FileNotFoundException
 	{
-		this.image = new Image(new FileInputStream(path));
+		this.image = new Image(getClass().getResourceAsStream(path));
 		this.id = path + "-" + m_x + "-" + m_y;
 
 		this.m_x = m_x;
@@ -30,7 +29,7 @@ public class Sprite
 	
 	public Sprite(String path,  String id, int m_x, int m_y) throws FileNotFoundException
 	{
-		this.image = new Image(new FileInputStream(path));
+		this.image = new Image(getClass().getResourceAsStream(path));
 		this.id = id;
 		this.m_x = m_x;
 		this.m_y = m_y;

@@ -1,6 +1,5 @@
 package de.halva6.snackman.controller;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import de.halva6.snackman.view.GameOverScreenView;
@@ -17,8 +16,8 @@ import javafx.stage.Stage;
 
 public class SceneController
 {
-	public static final String startScreenFXMLPath = "res/fxml/StartScreen.fxml";
-	public static final String gameOverFXMLPath = "res/fxml/GameOverScreen.fxml";
+	public static final String startScreenFXMLPath = "/fxml/StartScreen.fxml";
+	public static final String gameOverFXMLPath = "/fxml/GameOverScreen.fxml";
 
 	public static void gameScene(Node sourceNode)
 	{
@@ -47,10 +46,9 @@ public class SceneController
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			FileInputStream fxmlStream = new FileInputStream(scenePath);
+			FXMLLoader fxmlLoader = new FXMLLoader(SceneController.class.getResource(scenePath));
 
-			Pane root = fxmlLoader.load(fxmlStream);
+			Pane root = fxmlLoader.load();
 			Scene sreen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 
@@ -68,10 +66,9 @@ public class SceneController
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			FileInputStream fxmlStream = new FileInputStream(scenePath);
+			FXMLLoader fxmlLoader = new FXMLLoader(SceneController.class.getResource(scenePath));
 
-			GridPane root = fxmlLoader.load(fxmlStream);
+			GridPane root = fxmlLoader.load();
 			
 			GameOverScreenView gosv = fxmlLoader.getController();
 			gosv.setPointsText(points);

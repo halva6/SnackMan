@@ -94,7 +94,7 @@ public class GameLoop
 	private void gameOver()
 	{
 		String status;
-		String points = "" + dotCount;
+		String points = "" + scoreCount;
 		if (win)
 		{
 			status = "You won the game";
@@ -114,12 +114,12 @@ public class GameLoop
 			Map map = new Map();
 			this.tileMapSprites = map.initMap(gm.getMap());
 			this.dotCount = map.getDotCount();
-			this.player = new MovingSprite("res/img/pacman.png", 1, 1);
+			this.player = new MovingSprite("/img/pacman.png", 1, 1);
 			this.playerE = new EntityPlayer(1, 1, Direction.DOWN, gm.getMap());
 
 			for (int i = 0; i < this.enemyNumber; i++)
 			{
-				MovingSprite e = new MovingSprite("res/img/ghost.png", 9, 13);
+				MovingSprite e = new MovingSprite("/img/ghost.png", 9, 13);
 				EntityEnemy ee = new EntityEnemy(9, 13, gm.getMap());
 
 				this.enemys.add(e);

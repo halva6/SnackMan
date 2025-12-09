@@ -1,13 +1,11 @@
 package de.halva6.snackman.view;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Map
 {
-	public static final String TILEMAP_PATH = "res/img/tiles/";
+	public static final String TILEMAP_PATH = "/img/tiles/";
 
 	public static final int SNACK_NUMBER = 15;
 
@@ -23,20 +21,9 @@ public class Map
 
 	public Map()
 	{
-		File directory = new File(TILEMAP_PATH);
-		File[] files = directory.listFiles();
-
-		if (files != null)
-		{
-			this.tilePaths = new String[files.length];
-
-			for (int i = 0; i < files.length; i++)
-			{
-				this.tilePaths[i] = files[i].getName();
-			}
-		}
-
-		Arrays.sort(this.tilePaths);
+		tilePaths = new String[] { "00.png", "01.png", "02.png", "03.png", "04.png", "05.png", "06.png", "07.png",
+				"08.png", "09.png", "10.png", "11.png", "12.png", "13.png", "14.png", "15.png", "16.png", "17.png",
+				"18.png" };
 	}
 
 	public ArrayList<Sprite> initMap(int[][] map) throws FileNotFoundException

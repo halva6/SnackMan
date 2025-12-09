@@ -1,6 +1,5 @@
 package de.halva6.snackman.controller;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -22,10 +21,9 @@ public class Controller extends Application
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			FileInputStream fxmlStream = new FileInputStream(SceneController.startScreenFXMLPath);
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SceneController.startScreenFXMLPath));
 
-			Pane root = fxmlLoader.load(fxmlStream);
+			Pane root = fxmlLoader.load();
 			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 			stage.setScene(scene);
