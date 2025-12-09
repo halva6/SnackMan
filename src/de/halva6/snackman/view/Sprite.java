@@ -12,7 +12,7 @@ public class Sprite
 	protected Image image;
 	private String id;
 	protected final int m_x, m_y;
-	private final double xPos, yPos;
+	protected final double xPos, yPos;
 
 	public Sprite(String path, int m_x, int m_y) throws FileNotFoundException
 	{
