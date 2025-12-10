@@ -119,8 +119,8 @@ public class GameLoop
 
 			for (int i = 0; i < this.enemyNumber; i++)
 			{
-				MovingSprite e = new MovingSprite("/img/ghost.png", 9, 13);
-				EntityEnemy ee = new EntityEnemy(9, 13, gm.getMap());
+				MovingSprite e = new MovingSprite("/img/ghost.png", 12, 11);
+				EntityEnemy ee = new EntityEnemy(12, 11, gm.getMap());
 
 				this.enemys.add(e);
 				this.enemeyE.add(ee);

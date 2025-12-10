@@ -32,14 +32,14 @@ public class StartScreenView
 	@FXML
 	public void startLevel2(ActionEvent event)
 	{
-		SceneController.LEVEL_NUMBER = 1;
+		SceneController.LEVEL_NUMBER = 2;
 		SceneController.gameScene((Node) event.getSource());
 	}
 
 	@FXML
 	public void startLevel3(ActionEvent event)
 	{
-		SceneController.LEVEL_NUMBER = 1;
+		SceneController.LEVEL_NUMBER = 3;
 		SceneController.gameScene((Node) event.getSource());
 	}
 
