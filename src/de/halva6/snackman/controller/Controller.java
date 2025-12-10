@@ -26,7 +26,13 @@ public class Controller extends Application
 			Pane root = fxmlLoader.load();
 			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
+			
+			scene.getStylesheets().add(
+			        getClass().getResource(SceneController.STYLE_PATH).toExternalForm());
+
+			
 			stage.setScene(scene);
+			stage.setTitle("SnackMan");
 			stage.show();
 		} catch (IOException e)
 		{

@@ -21,7 +21,7 @@ public class Score
 	{
 		gc.setFont(Font.font(font, FontWeight.BOLD, fontHeight));
 		gc.setLineWidth(fontHeight);
-		gc.setFill(Color.GREEN);
+		gc.setFill(Color.web("#0a728d"));
 		
 		this.text_x = x_offset;
 		this.text_y = Controller.WIDTH * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT - (Controller.SCORE_HEIGHT/2) + (fontHeight/2);

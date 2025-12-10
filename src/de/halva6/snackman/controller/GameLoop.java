@@ -20,7 +20,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class GameLoop
 {
 	private long lastUpdate = 0;
-	private Input input;
+	private final Input input;
 
 	private AnimationTimer timer;
 	private double accumulator = 0;
@@ -224,17 +224,17 @@ public class GameLoop
 			Sprite tile = tileMapSprites.get(i);
 			// if the id of the tile is dot -> checks only dots because it is better for the
 			// performance
-			
+
 			if (tile.getId().contains("food"))
 			{
 				if (tile.collideSprite(player))
 				{
-					
+
 					String idSplit[] = tile.getId().split("-");
-															
+
 					// increase the score
 					scoreCount += Integer.valueOf(idSplit[0]) * 5;
-					
+
 					// decrease the dotCount -> this represents the number of all available dots ->
 					// if there are no dots anymore, the game is over an the player won
 					dotCount--;

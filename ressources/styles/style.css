@@ -1,0 +1,18 @@
+.pane {
+    -fx-background-color: #000000;
+}
+
+.button-style
+{
+    -fx-background-color: transparent;	
+}
+
+.level-button-style
+{
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-padding: 20;
+}

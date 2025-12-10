@@ -17,14 +17,14 @@ public class GameOverScreenView
 
 	@FXML
 	private Text statusText;
-	
+
 	@FXML
 	private Text pointsText;
-	
+
 	@FXML
-	public void initialize() 
+	public void initialize()
 	{
-		
+
 	}
 
 	@FXML
@@ -43,8 +43,8 @@ public class GameOverScreenView
 	{
 		this.statusText.setText(text);
 	}
-	
-	public void setPointsText(String text) 
+
+	public void setPointsText(String text)
 	{
 		this.pointsText.setText(text);
 	}

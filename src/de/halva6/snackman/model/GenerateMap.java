@@ -5,20 +5,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+import de.halva6.snackman.controller.SceneController;
+
 public class GenerateMap
 {
-	private static final String FILE_PATH = "/level/Level1.csv";
+	private static final String FILE_PATH = "/level/Level";
 	private int[][] map;
 
 	public GenerateMap(int width, int height)
 	{
 		this.map = new int[width][height];
+
 		initMap();
 	}
 
 	private void initMap()
 	{
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(FILE_PATH))))
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(
+				getClass().getResourceAsStream(FILE_PATH + SceneController.LEVEL_NUMBER + ".csv"))))
 		{
 			String line;
 			int i = 0;

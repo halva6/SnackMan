@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -18,6 +17,16 @@ public class SceneController
 {
 	public static final String startScreenFXMLPath = "/fxml/StartScreen.fxml";
 	public static final String gameOverFXMLPath = "/fxml/GameOverScreen.fxml";
+
+	public static final String STYLE_PATH = "/styles/style.css";
+
+	public static final String MAIN_IMAGE = "/img/ui/play_snackman.png";
+	public static final String LEVEL1 = "/img/ui/level1.png";
+	public static final String LEVEL2 = "/img/ui/level2.png";
+	public static final String LEVEL3 = "/img/ui/level3.png";
+
+	
+	public static int LEVEL_NUMBER = 1;
 
 	public static void gameScene(Node sourceNode)
 	{
@@ -49,11 +58,13 @@ public class SceneController
 			FXMLLoader fxmlLoader = new FXMLLoader(SceneController.class.getResource(scenePath));
 
 			Pane root = fxmlLoader.load();
-			Scene sreen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
+			Scene screen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 
+			screen.getStylesheets().add(SceneController.class.getResource(STYLE_PATH).toExternalForm());
+
 			Stage stage = (Stage) sourceNode.getScene().getWindow();
-			stage.setScene(sreen);
+			stage.setScene(screen);
 			stage.show();
 		} catch (IOException e)
 		{
@@ -61,24 +72,26 @@ public class SceneController
 			System.exit(0);
 		}
 	}
-	
+
 	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points)
 	{
 		try
 		{
 			FXMLLoader fxmlLoader = new FXMLLoader(SceneController.class.getResource(scenePath));
 
-			GridPane root = fxmlLoader.load();
-			
+			Pane root = fxmlLoader.load();
+
 			GameOverScreenView gosv = fxmlLoader.getController();
 			gosv.setPointsText(points);
 			gosv.setStatusText(status);
-			
-			Scene sreen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
+
+			Scene screen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 
+			screen.getStylesheets().add(SceneController.class.getResource(STYLE_PATH).toExternalForm());
+
 			Stage stage = (Stage) sourceNode.getScene().getWindow();
-			stage.setScene(sreen);
+			stage.setScene(screen);
 			stage.show();
 		} catch (IOException e)
 		{
