@@ -2,6 +2,8 @@ package de.halva6.snackman.controller;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.halva6.snackman.model.Direction;
 import de.halva6.snackman.model.EntityEnemy;
@@ -19,12 +21,15 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class GameLoop
 {
+	private static final Logger logger = Logger.getLogger(GameLoop.class.getName());
+	private static final int DEFAULT_ENEMY_NUMBER = 3;
+	private static final double FIXED_DELTA_TIME = 0.005; // like the fps
+
 	private long lastUpdate = 0;
 	private final Input input;
 
 	private AnimationTimer timer;
 	private double accumulator = 0;
-	private final double fixedDeltaTime = 0.005; // like the fps
 
 	private GraphicsContext gc;
 	private ArrayList<Sprite> tileMapSprites;
@@ -32,14 +37,14 @@ public class GameLoop
 	private MovingSprite player;
 	private EntityPlayer playerE;
 
-	private ArrayList<MovingSprite> enemys = new ArrayList<MovingSprite>();
-	private ArrayList<EntityEnemy> enemeyE = new ArrayList<EntityEnemy>();
-	private final int enemyNumber = 3;
+	private ArrayList<MovingSprite> enemys = new ArrayList<>();
+	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>();
+
 
 	private int scoreCount = 0;
 	private Score score;
 	private int dotCount = 0;
-
+	private int enemy_number = DEFAULT_ENEMY_NUMBER;
 	private boolean gameOver, win = false;
 
 	public GameLoop(Input input, Canvas canvas)
@@ -64,10 +69,10 @@ public class GameLoop
 
 				accumulator += deltaTime;
 
-				while (accumulator >= fixedDeltaTime)
+				while (accumulator >= FIXED_DELTA_TIME)
 				{
 					fixedUpdate();
-					accumulator -= fixedDeltaTime;
+					accumulator -= FIXED_DELTA_TIME;
 				}
 
 				updateGame(deltaTime);
@@ -82,12 +87,13 @@ public class GameLoop
 							gameOver();
 						} catch (Exception e)
 						{
-							e.printStackTrace();
+							logger.log(Level.SEVERE, "Exception in gameOver()", e);
 						}
 					});
 				}
 			}
 		};
+
 		timer.start();
 	}
 
@@ -102,7 +108,7 @@ public class GameLoop
 		{
 			status = "You lost the game";
 		}
-		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.gameOverFXMLPath, status, points);
+		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points);
 	}
 
 	// executes all before the first frame will be rendered
@@ -117,7 +123,7 @@ public class GameLoop
 			this.player = new MovingSprite("/img/pacman.png", 1, 1);
 			this.playerE = new EntityPlayer(1, 1, Direction.DOWN, gm.getMap());
 
-			for (int i = 0; i < this.enemyNumber; i++)
+			for (int i = 0; i < this.enemy_number; i++)
 			{
 				MovingSprite e = new MovingSprite("/img/ghost.png", 12, 11);
 				EntityEnemy ee = new EntityEnemy(12, 11, gm.getMap());
@@ -128,8 +134,7 @@ public class GameLoop
 
 		} catch (FileNotFoundException e)
 		{
-			System.err.println("[Error] rendering the tilemap: " + e.getMessage());
-			e.printStackTrace();
+			logger.log(Level.SEVERE, String.format("[Error] rendering the tilemap: %s", e.getMessage()), e);
 			System.exit(1);
 		}
 	}
@@ -171,7 +176,7 @@ public class GameLoop
 
 		// move the enemies
 
-		for (int i = 0; i < this.enemyNumber; i++)
+		for (int i = 0; i < this.enemy_number; i++)
 		{
 			MovingSprite e = this.enemys.get(i);
 			EntityEnemy ee = this.enemeyE.get(i);
@@ -230,7 +235,7 @@ public class GameLoop
 				if (tile.collideSprite(player))
 				{
 
-					String idSplit[] = tile.getId().split("-");
+					String[] idSplit = tile.getId().split("-");
 
 					// increase the score
 					scoreCount += Integer.valueOf(idSplit[0]) * 5;

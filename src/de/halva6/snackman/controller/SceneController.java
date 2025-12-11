@@ -1,6 +1,8 @@
 package de.halva6.snackman.controller;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.halva6.snackman.view.GameOverScreenView;
 import de.halva6.snackman.view.Input;
@@ -15,8 +17,9 @@ import javafx.stage.Stage;
 
 public class SceneController
 {
-	public static final String startScreenFXMLPath = "/fxml/StartScreen.fxml";
-	public static final String gameOverFXMLPath = "/fxml/GameOverScreen.fxml";
+    private static final Logger logger = Logger.getLogger(SceneController.class.getName());
+	public static final String START_SCREEN_FXML_PATH = "/fxml/StartScreen.fxml";
+	public static final String GAME_OVER_FXML_PATH = "/fxml/GameOverScreen.fxml";
 
 	public static final String STYLE_PATH = "/styles/style.css";
 
@@ -25,7 +28,7 @@ public class SceneController
 	public static final String LEVEL2 = "/img/ui/level2.png";
 	public static final String LEVEL3 = "/img/ui/level3.png";
 
-	
+
 	public static int LEVEL_NUMBER = 1;
 
 	public static void gameScene(Node sourceNode)
@@ -68,7 +71,7 @@ public class SceneController
 			stage.show();
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Failed to load start screen scene", e);
 			System.exit(0);
 		}
 	}
@@ -95,7 +98,7 @@ public class SceneController
 			stage.show();
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Failed to load game over screen scene", e);
 			System.exit(0);
 		}
 	}

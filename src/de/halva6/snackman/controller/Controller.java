@@ -21,7 +21,7 @@ public class Controller extends Application
 	{
 		try
 		{
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SceneController.startScreenFXMLPath));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SceneController.START_SCREEN_FXML_PATH));
 
 			Pane root = fxmlLoader.load();
 			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,

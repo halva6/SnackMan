@@ -36,7 +36,7 @@ public class GameOverScreenView
 	@FXML
 	public void goBackToMenu(ActionEvent event)
 	{
-		SceneController.startScreenScene((Node) event.getSource(), SceneController.startScreenFXMLPath);
+		SceneController.startScreenScene((Node) event.getSource(), SceneController.START_SCREEN_FXML_PATH);
 	}
 
 	public void setStatusText(String text)

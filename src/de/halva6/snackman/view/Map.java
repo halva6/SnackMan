@@ -2,6 +2,7 @@ package de.halva6.snackman.view;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Map
 {
@@ -28,7 +29,7 @@ public class Map
 
 	public ArrayList<Sprite> initMap(int[][] map) throws FileNotFoundException
 	{
-		ArrayList<Sprite> tileMapSprites = new ArrayList<Sprite>();
+		ArrayList<Sprite> tileMapSprites = new ArrayList<>();
 		for (int y = 0; y < map.length; y++)
 		{
 			for (int x = 0; x < map[y].length; x++)
