@@ -6,7 +6,7 @@ import javafx.scene.input.KeyEvent;
 
 public class Input
 {
-	private boolean up, down, left, right = false;
+	private boolean up, down, left, right, escape = false;
 	private EventHandler<KeyEvent> event;
 
 	public Input()
@@ -48,6 +48,8 @@ public class Input
 				case KeyCode.RIGHT:
 					right = keyCode;
 					break;
+				case KeyCode.ESCAPE:
+					escape = keyCode;
 				default:
 					break;
 				}
@@ -76,6 +78,11 @@ public class Input
 	public boolean isRight()
 	{
 		return right;
+	}
+	
+	public boolean isEscape() 
+	{
+		return escape;
 	}
 
 	public EventHandler<KeyEvent> getEvent()

@@ -12,10 +12,12 @@ import de.halva6.snackman.model.GenerateMap;
 import de.halva6.snackman.view.Input;
 import de.halva6.snackman.view.Map;
 import de.halva6.snackman.view.MovingSprite;
+import de.halva6.snackman.view.PauseView;
 import de.halva6.snackman.view.Score;
 import de.halva6.snackman.view.Sprite;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -40,18 +42,21 @@ public class GameLoop
 	private ArrayList<MovingSprite> enemys = new ArrayList<>();
 	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>();
 
-
 	private int scoreCount = 0;
 	private Score score;
 	private int dotCount = 0;
 	private int enemy_number = DEFAULT_ENEMY_NUMBER;
-	private boolean gameOver, win = false;
+	private boolean gameOver, win, pause, escapeBlock = false;
 
-	public GameLoop(Input input, Canvas canvas)
+	private PauseView pauseView = new PauseView();
+
+	public GameLoop(Group root, Input input, Canvas canvas)
 	{
 		this.input = input;
 		this.gc = canvas.getGraphicsContext2D();
 		this.score = new Score(gc);
+
+		root.getChildren().add(pauseView.getPauseView());
 
 		awake();
 
@@ -67,34 +72,46 @@ public class GameLoop
 
 				double deltaTime = (now - lastUpdate) / 1_000_000_000.0;
 
-				accumulator += deltaTime;
-
-				while (accumulator >= FIXED_DELTA_TIME)
+				if (!pause)
 				{
-					fixedUpdate();
-					accumulator -= FIXED_DELTA_TIME;
+					accumulator += deltaTime;
+
+					while (accumulator >= FIXED_DELTA_TIME)
+					{
+						fixedUpdate();
+						accumulator -= FIXED_DELTA_TIME;
+					}
 				}
 
 				updateGame(deltaTime);
 				lastUpdate = now;
 
-				if (gameOver)
-				{
-					stop();
-					Platform.runLater(() -> {
-						try
-						{
-							gameOver();
-						} catch (Exception e)
-						{
-							logger.log(Level.SEVERE, "Exception in gameOver()", e);
-						}
-					});
-				}
+				exitGame();
 			}
 		};
 
 		timer.start();
+	}
+
+	private void exitGame()
+	{
+		if (gameOver)
+		{
+			timer.stop();
+			Platform.runLater(() -> {
+				try
+				{
+					gameOver();
+				} catch (Exception e)
+				{
+					logger.log(Level.SEVERE, "Exception in gameOver()", e);
+				}
+			});
+		}
+		if (pauseView.getExitGame())
+		{
+			timer.stop();
+		}
 	}
 
 	private void gameOver()
@@ -156,36 +173,48 @@ public class GameLoop
 	// updates every frame
 	private void updateGame(double deltaTime)
 	{
-		// assigning keyboard input to the corresponding directions
-		if (input.isUp())
+		if (!pause)
 		{
-			playerE.setReqDirection(Direction.UP);
-		} else if (input.isDown())
+			// If there is no pause, and the escape key is pressed and then released, the
+			// program will be paused.
+			setPause();
+
+			// assigning keyboard input to the corresponding directions
+			if (input.isUp())
+			{
+				playerE.setReqDirection(Direction.UP);
+			} else if (input.isDown())
+			{
+				playerE.setReqDirection(Direction.DOWN);
+			} else if (input.isLeft())
+			{
+				playerE.setReqDirection(Direction.LEFT);
+			} else if (input.isRight())
+			{
+				playerE.setReqDirection(Direction.RIGHT);
+			}
+
+			// move the player sprite
+			player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection().getAngle());
+
+			// move the enemies
+
+			for (int i = 0; i < this.enemy_number; i++)
+			{
+				MovingSprite e = this.enemys.get(i);
+				EntityEnemy ee = this.enemeyE.get(i);
+
+				e.moveSprite(gc, ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection().getAngle());
+			}
+
+			manageCollision();
+			render();
+		} else
 		{
-			playerE.setReqDirection(Direction.DOWN);
-		} else if (input.isLeft())
-		{
-			playerE.setReqDirection(Direction.LEFT);
-		} else if (input.isRight())
-		{
-			playerE.setReqDirection(Direction.RIGHT);
+			// However, if there is a pause and the escape key is pressed and then released,
+			// the pause will end.
+			setPause();
 		}
-
-		// move the player sprite
-		player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection().getAngle());
-
-		// move the enemies
-
-		for (int i = 0; i < this.enemy_number; i++)
-		{
-			MovingSprite e = this.enemys.get(i);
-			EntityEnemy ee = this.enemeyE.get(i);
-
-			e.moveSprite(gc, ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection().getAngle());
-		}
-
-		manageCollision();
-		render();
 	}
 
 	private void render()
@@ -204,7 +233,6 @@ public class GameLoop
 		this.player.renderSprite(gc);
 
 		// render all enemies
-
 		for (MovingSprite e : this.enemys)
 		{
 			e.renderSprite(gc);
@@ -258,6 +286,32 @@ public class GameLoop
 				gameOver = true;
 			}
 
+		}
+	}
+
+	private void setPause()
+	{
+		//when the button is pressed to exit the pause screen
+		if (pauseView.getExitPause())
+		{
+			escapeBlock = false;
+			pause = !pause;
+			pauseView.setVisible(pause);
+			pauseView.setExitPause(false);
+		}
+
+		// When the Escape key is pressed and then released, the pause status is
+		// reversed.
+		if (input.isEscape() && !escapeBlock)
+		{
+			escapeBlock = true;
+		}
+
+		if (!input.isEscape() && escapeBlock)
+		{
+			escapeBlock = false;
+			pause = !pause;
+			pauseView.setVisible(pause);
 		}
 	}
 }

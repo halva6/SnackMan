@@ -41,13 +41,15 @@ public class SceneController
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT, Color.BLACK);
 		gameScene.setOnKeyPressed(input.getEvent());
 		gameScene.setOnKeyReleased(input.getEvent());
+		gameScene.getStylesheets().add(SceneController.class.getResource(STYLE_PATH).toExternalForm());
+
 
 		Canvas canvas = new Canvas(Controller.WIDTH * Controller.SPRITE_SIZE,
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 		root.getChildren().add(canvas);
 
 		@SuppressWarnings("unused")
-		GameLoop gameLoop = new GameLoop(input, canvas);
+		GameLoop gameLoop = new GameLoop(root, input, canvas);
 
 		Stage stage = (Stage) sourceNode.getScene().getWindow();
 		stage.setScene(gameScene);

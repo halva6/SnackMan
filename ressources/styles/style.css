@@ -4,7 +4,13 @@
 
 .button-style
 {
-    -fx-background-color: transparent;	
+    -fx-background-color: transparent;
+	-fx-border-color: #0a728d;
+	-fx-border-width: 2;
+	-fx-text-fill: #0a728d;
+	-fx-font-family: "DejaVu Sans";
+	-fx-font-size: 18px;
+	-fx-font-weight: BOLD;
 }
 
 .level-button-style
@@ -15,4 +21,35 @@
 	-fx-background-color: transparent;
 	-fx-border-color: transparent;
 	-fx-padding: 20;
+}
+
+.semi-transparent-pane
+{
+	-fx-background-color: rgba(0,0,0,0.85);
+}
+
+.heading-text, .normal-text, .small-text
+{
+	-fx-fill: #0a728d;
+	-fx-font-family: "DejaVu Sans";
+    -fx-alignment: CENTER;
+	-fx-font-weight: BOLD;
+}
+
+
+.heading-text
+{
+	-fx-font-size: 44px;
+	-fx-underline: true;
+
+}
+
+.normal-text
+{
+	-fx-font-size: 24px;
+}
+
+.small-text
+{
+	-fx-font-size: 14px;
 }
