@@ -14,7 +14,7 @@ import de.halva6.snackman.view.Map;
 import de.halva6.snackman.view.MovingSprite;
 import de.halva6.snackman.view.PauseView;
 import de.halva6.snackman.view.Score;
-import de.halva6.snackman.view.Sprite;
+import de.halva6.snackman.view.StaticSprite;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -34,7 +34,7 @@ public class GameLoop
 	private double accumulator = 0;
 
 	private GraphicsContext gc;
-	private ArrayList<Sprite> tileMapSprites;
+	private ArrayList<StaticSprite> tileMapSprites;
 
 	private MovingSprite player;
 	private EntityPlayer playerE;
@@ -195,20 +195,20 @@ public class GameLoop
 			}
 
 			// move the player sprite
-			player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection().getAngle());
+			player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection(),
+					playerE.isMoving());
 
 			// move the enemies
-
 			for (int i = 0; i < this.enemy_number; i++)
 			{
 				MovingSprite e = this.enemys.get(i);
 				EntityEnemy ee = this.enemeyE.get(i);
 
-				e.moveSprite(gc, ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection().getAngle());
+				e.moveSprite(gc, ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection(), ee.isMoving());
 			}
 
 			manageCollision();
-			render();
+			render(deltaTime);
 		} else
 		{
 			// However, if there is a pause and the escape key is pressed and then released,
@@ -217,25 +217,25 @@ public class GameLoop
 		}
 	}
 
-	private void render()
+	private void render(double deltaTime)
 	{
 		// resets the canvas (if not, all moving sprites would be duplicated)
 		gc.clearRect(0, 0, Controller.WIDTH * Controller.SPRITE_SIZE,
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 
 		// render all tiles of the tile map
-		for (Sprite tileSprite : tileMapSprites)
+		for (StaticSprite tileSprite : tileMapSprites)
 		{
-			tileSprite.renderSprite(gc);
+			tileSprite.renderSprite(gc, deltaTime);
 		}
 
 		// render the player
-		this.player.renderSprite(gc);
+		this.player.renderSprite(gc, deltaTime);
 
 		// render all enemies
 		for (MovingSprite e : this.enemys)
 		{
-			e.renderSprite(gc);
+			e.renderSprite(gc, deltaTime);
 		}
 
 		// render the score text
@@ -254,7 +254,7 @@ public class GameLoop
 		// checks all dots
 		for (int i = 0; i < tileMapSprites.size(); i++)
 		{
-			Sprite tile = tileMapSprites.get(i);
+			StaticSprite tile = tileMapSprites.get(i);
 			// if the id of the tile is dot -> checks only dots because it is better for the
 			// performance
 
@@ -291,7 +291,7 @@ public class GameLoop
 
 	private void setPause()
 	{
-		//when the button is pressed to exit the pause screen
+		// when the button is pressed to exit the pause screen
 		if (pauseView.getExitPause())
 		{
 			escapeBlock = false;

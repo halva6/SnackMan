@@ -27,26 +27,26 @@ public class Map
 				"18.png" };
 	}
 
-	public ArrayList<Sprite> initMap(int[][] map) throws FileNotFoundException
+	public ArrayList<StaticSprite> initMap(int[][] map) throws FileNotFoundException
 	{
-		ArrayList<Sprite> tileMapSprites = new ArrayList<>();
+		ArrayList<StaticSprite> tileMapSprites = new ArrayList<>();
 		for (int y = 0; y < map.length; y++)
 		{
 			for (int x = 0; x < map[y].length; x++)
 			{
 				int tileId = map[y][x];
 
-				Sprite tile = null;
+				StaticSprite tile = null;
 				if (tileId >= 15)
 				{
 					String id = tileId + "-food-" + x + y;
-					tile = new Sprite(TILEMAP_PATH + tilePaths[tileId], id, x, y);
+					tile = new StaticSprite(TILEMAP_PATH + tilePaths[tileId], id, x, y);
 					tileMapSprites.add(tile);
 
 					dotCount++;
 				} else if (tileId >= 0)
 				{
-					tile = new Sprite(TILEMAP_PATH + tilePaths[tileId], x, y);
+					tile = new StaticSprite(TILEMAP_PATH + tilePaths[tileId], x, y);
 					tileMapSprites.add(tile);
 				}
 

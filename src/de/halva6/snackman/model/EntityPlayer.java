@@ -4,7 +4,7 @@ import de.halva6.snackman.controller.Controller;
 
 public class EntityPlayer extends Entity
 {
-	
+
 	public EntityPlayer(int m_x, int m_y, Direction movingDirection, int[][] map)
 	{
 		super(m_x, m_y, map);
@@ -30,12 +30,13 @@ public class EntityPlayer extends Entity
 			m_x = (int) this.p_x / Controller.SPRITE_SIZE;
 			m_y = (int) this.p_y / Controller.SPRITE_SIZE;
 
-			//it checks if there is a wall in front of the player (in the direction of movement) 
-			//if so, the speed is later set to 0
+			// it checks if there is a wall in front of the player (in the direction of
+			// movement)
+			// if so, the speed is later set to 0
 			frontWall = wallCollision(entityDirection);
 
-			//it checks whether there is an obstacle in the desired direction; 
-			//if so, the desired direction does not become the entity direction
+			// it checks whether there is an obstacle in the desired direction;
+			// if so, the desired direction does not become the entity direction
 			wall = wallCollision(reqDirection);
 
 			if (!wall)
@@ -46,7 +47,7 @@ public class EntityPlayer extends Entity
 
 		if (!frontWall)
 		{
-			//sets the speed values ​​depending on the direction the entity should move
+			// sets the speed values ​​depending on the direction the entity should move
 			setSpeedInDirection(entityDirection);
 		} else
 		{

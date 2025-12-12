@@ -45,6 +45,11 @@ public abstract class Entity
 	{
 		this.reqDirection = reqDirection;
 	}
+	
+	public boolean isMoving()
+	{
+		return !(speed_x == 0 && speed_y == 0);
+	}
 
 	protected boolean wallCollision(Direction d)
 	{
