@@ -1,25 +1,22 @@
-package de.halva6.snackman.view;
+package de.halva6.snackman.view.sprites;
 
 import de.halva6.snackman.controller.Controller;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class AnimatedStaticSprite implements Sprite<AnimatedStaticSprite>
+public class AnimatedStaticSprite extends Sprite
 {
-	private static final double ANIMATION_TIME = 0.100;
-
-	private final String id;
 	private final int framesNumber;
 
 	protected final Image[] frames;
 	protected final double size;
 
-	protected double p_x, p_y;
+	protected int currentIndex = 0;
+	protected double elapsedTime = 0;
 
 	public AnimatedStaticSprite(String imagePaths, int m_x, int m_y, int framesNumber)
 	{
-		this.id = imagePaths + "-" + m_x + "-" + m_y;
+		super(imagePaths + "-" + m_x + "-" + m_y);
 		this.framesNumber = framesNumber;
 
 		this.frames = getFrames(imagePaths);
@@ -42,17 +39,16 @@ public class AnimatedStaticSprite implements Sprite<AnimatedStaticSprite>
 		return frames;
 	}
 
-	@Override
-	public String getId()
+	public void renderSprite(GraphicsContext gc, double deltaTime, double animationTime)
 	{
-		return this.id;
+		elapsedTime += deltaTime;
+		currentIndex = (int) (elapsedTime / animationTime) % frames.length;
+		gc.drawImage(frames[currentIndex], this.p_x, this.p_y);
 	}
 
-	@Override
-	public void renderSprite(GraphicsContext gc, double deltaTime)
+	public int getCurrentIndex()
 	{
-		int index = (int) ((deltaTime % (frames.length * ANIMATION_TIME)) / ANIMATION_TIME);
-		gc.drawImage(frames[index], this.p_x, this.p_y);
+		return this.currentIndex;
 	}
 
 	@Override
@@ -60,17 +56,4 @@ public class AnimatedStaticSprite implements Sprite<AnimatedStaticSprite>
 	{
 		return this.size;
 	}
-
-	@Override
-	public Rectangle2D getRect()
-	{
-		return new Rectangle2D(p_x, p_y, size, size);
-	}
-
-	@Override
-	public boolean collideSprite(AnimatedStaticSprite otherSprite)
-	{
-		return this.getRect().intersects(otherSprite.getRect());
-	}
-
 }

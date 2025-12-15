@@ -11,10 +11,10 @@ import de.halva6.snackman.model.EntityPlayer;
 import de.halva6.snackman.model.GenerateMap;
 import de.halva6.snackman.view.Input;
 import de.halva6.snackman.view.Map;
-import de.halva6.snackman.view.MovingSprite;
 import de.halva6.snackman.view.PauseView;
 import de.halva6.snackman.view.Score;
-import de.halva6.snackman.view.StaticSprite;
+import de.halva6.snackman.view.sprites.AnimatedMovingSprite;
+import de.halva6.snackman.view.sprites.StaticSprite;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -36,10 +36,10 @@ public class GameLoop
 	private GraphicsContext gc;
 	private ArrayList<StaticSprite> tileMapSprites;
 
-	private MovingSprite player;
+	private AnimatedMovingSprite player;
 	private EntityPlayer playerE;
 
-	private ArrayList<MovingSprite> enemys = new ArrayList<>();
+	private ArrayList<AnimatedMovingSprite> enemys = new ArrayList<>();
 	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>();
 
 	private int scoreCount = 0;
@@ -137,12 +137,12 @@ public class GameLoop
 			Map map = new Map();
 			this.tileMapSprites = map.initMap(gm.getMap());
 			this.dotCount = map.getDotCount();
-			this.player = new MovingSprite("/img/pacman.png", 1, 1);
+			this.player = new AnimatedMovingSprite(Controller.PACMAN_PATH, 1, 1, 6);
 			this.playerE = new EntityPlayer(1, 1, Direction.DOWN, gm.getMap());
 
 			for (int i = 0; i < this.enemy_number; i++)
 			{
-				MovingSprite e = new MovingSprite("/img/ghost.png", 12, 11);
+				AnimatedMovingSprite e = new AnimatedMovingSprite(Controller.GHOST_PATH, 12, 11, 6);
 				EntityEnemy ee = new EntityEnemy(12, 11, gm.getMap());
 
 				this.enemys.add(e);
@@ -195,16 +195,15 @@ public class GameLoop
 			}
 
 			// move the player sprite
-			player.moveSprite(gc, playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection(),
-					playerE.isMoving());
+			player.moveSprite(playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection(), playerE.isMoving());
 
 			// move the enemies
 			for (int i = 0; i < this.enemy_number; i++)
 			{
-				MovingSprite e = this.enemys.get(i);
+				AnimatedMovingSprite e = this.enemys.get(i);
 				EntityEnemy ee = this.enemeyE.get(i);
 
-				e.moveSprite(gc, ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection(), ee.isMoving());
+				e.moveSprite(ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection(), ee.isMoving());
 			}
 
 			manageCollision();
@@ -226,16 +225,16 @@ public class GameLoop
 		// render all tiles of the tile map
 		for (StaticSprite tileSprite : tileMapSprites)
 		{
-			tileSprite.renderSprite(gc, deltaTime);
+			tileSprite.renderSprite(gc);
 		}
 
 		// render the player
-		this.player.renderSprite(gc, deltaTime);
+		this.player.renderSprite(gc, deltaTime, Controller.PACMAN_ANIMATION_DUARTION);
 
 		// render all enemies
-		for (MovingSprite e : this.enemys)
+		for (AnimatedMovingSprite e : this.enemys)
 		{
-			e.renderSprite(gc, deltaTime);
+			e.renderSprite(gc, deltaTime, Controller.GHOST_ANIMATION_DUARTION);
 		}
 
 		// render the score text
@@ -262,7 +261,6 @@ public class GameLoop
 			{
 				if (tile.collideSprite(player))
 				{
-
 					String[] idSplit = tile.getId().split("-");
 
 					// increase the score
@@ -279,9 +277,9 @@ public class GameLoop
 		}
 
 		// checks all enemies
-		for (int i = 0; i < enemys.size(); i++)
+		for (AnimatedMovingSprite enemy : enemys)
 		{
-			if (enemys.get(i).collideSprite(player))
+			if (enemy.collideSprite(player))
 			{
 				gameOver = true;
 			}

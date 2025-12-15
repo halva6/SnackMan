@@ -26,12 +26,12 @@ public abstract class Entity
 
 	public abstract void move();
 
-	public double getPosX()
+	public int getPosX()
 	{
 		return p_x;
 	}
 
-	public double getPosY()
+	public int getPosY()
 	{
 		return p_y;
 	}

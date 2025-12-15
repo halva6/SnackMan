@@ -15,6 +15,15 @@ public class Controller extends Application
 	public static final int HEIGHT = 25;
 	public static final int SPRITE_SIZE = 32;
 	public static final int SCORE_HEIGHT = 30;
+	
+	public static final String TILEMAP_PATH = "/img/tiles/";
+	
+	public static final String PACMAN_PATH = "/img/pacman/";
+	public static final double PACMAN_ANIMATION_DUARTION = 0.1;
+	
+	public static final String GHOST_PATH = "/img/ghost/";
+	public static final double GHOST_ANIMATION_DUARTION = 0.2;
+
 
 	@Override
 	public void start(Stage stage)

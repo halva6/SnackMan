@@ -2,12 +2,12 @@ package de.halva6.snackman.view;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
+
+import de.halva6.snackman.controller.Controller;
+import de.halva6.snackman.view.sprites.StaticSprite;
 
 public class Map
 {
-	public static final String TILEMAP_PATH = "/img/tiles/";
-
 	public static final int SNACK_NUMBER = 15;
 
 	public static final int NUMBER_OF_TILES = 19;
@@ -40,13 +40,13 @@ public class Map
 				if (tileId >= 15)
 				{
 					String id = tileId + "-food-" + x + y;
-					tile = new StaticSprite(TILEMAP_PATH + tilePaths[tileId], id, x, y);
+					tile = new StaticSprite(Controller.TILEMAP_PATH + tilePaths[tileId], id, x, y);
 					tileMapSprites.add(tile);
 
 					dotCount++;
 				} else if (tileId >= 0)
 				{
-					tile = new StaticSprite(TILEMAP_PATH + tilePaths[tileId], x, y);
+					tile = new StaticSprite(Controller.TILEMAP_PATH + tilePaths[tileId], x, y);
 					tileMapSprites.add(tile);
 				}
 
