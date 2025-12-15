@@ -20,11 +20,11 @@
             </ImageView>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button id="level1-button" fx:id="level1Button" mnemonicParsing="false" onAction="#startLevel1" styleClass="level-button-style" stylesheets="@../styles/style.css" text="level1" textAlignment="CENTER">
+                  <Button id="level1-button" fx:id="level1Button" mnemonicParsing="false" onAction="#startLevel1" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
                   </Button>
-                  <Button id="level2-button" fx:id="level2Button" mnemonicParsing="false" onAction="#startLevel2" styleClass="level-button-style" stylesheets="@../styles/style.css" text="level2" textAlignment="CENTER">
+                  <Button id="level2-button" fx:id="level2Button" mnemonicParsing="false" onAction="#startLevel2" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
                   </Button>
-                  <Button id="level3-button" fx:id="level3Button" mnemonicParsing="false" onAction="#startLevel3" styleClass="level-button-style" stylesheets="@../styles/style.css" text="level3" textAlignment="CENTER">
+                  <Button id="level3-button" fx:id="level3Button" mnemonicParsing="false" onAction="#startLevel3" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
                   </Button>
                </children>
             </HBox>

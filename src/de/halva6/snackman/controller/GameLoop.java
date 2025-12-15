@@ -49,12 +49,15 @@ public class GameLoop
 	private boolean gameOver, win, pause, escapeBlock = false;
 
 	private PauseView pauseView = new PauseView();
+	
+	private final AudioController ac;
 
 	public GameLoop(Group root, Input input, Canvas canvas)
 	{
 		this.input = input;
 		this.gc = canvas.getGraphicsContext2D();
 		this.score = new Score(gc);
+		this.ac = new AudioController();
 
 		root.getChildren().add(pauseView.getPauseView());
 
@@ -121,9 +124,11 @@ public class GameLoop
 		if (win)
 		{
 			status = "You won the game";
+			ac.playWinSound();
 		} else
 		{
 			status = "You lost the game";
+			ac.playHuntSound();
 		}
 		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points);
 	}
@@ -272,6 +277,8 @@ public class GameLoop
 
 					// removes the dot from the tile map -> will not be rendered anymore
 					tileMapSprites.remove(i);
+					
+					ac.playEatSound();
 				}
 			}
 		}
@@ -283,7 +290,6 @@ public class GameLoop
 			{
 				gameOver = true;
 			}
-
 		}
 	}
 
