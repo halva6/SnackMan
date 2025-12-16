@@ -22,6 +22,9 @@ public class GameOverScreenView
 	private Text pointsText;
 
 	@FXML
+	private Text timeText;
+
+	@FXML
 	public void initialize()
 	{
 
@@ -47,6 +50,11 @@ public class GameOverScreenView
 	public void setPointsText(String text)
 	{
 		this.pointsText.setText(text);
+	}
+
+	public void setTimeText(String text)
+	{
+		this.timeText.setText(text);
 	}
 
 }

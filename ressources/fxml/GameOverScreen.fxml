@@ -14,6 +14,7 @@
             </Text>
             <Text fx:id="pointsText" fill="#0a728d" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-text" text="Points" textAlignment="CENTER">
             </Text>
+            <Text fx:id="timeText" fill="#0a728d" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-text" text="Time" textAlignment="CENTER" />
             <Button fx:id="restart" contentDisplay="CENTER" mnemonicParsing="false" onAction="#restartGame" styleClass="button-style" stylesheets="@../styles/style.css" text="Restart" textAlignment="CENTER">
             </Button>
             <Button fx:id="backToMenu" mnemonicParsing="false" onAction="#goBackToMenu" styleClass="button-style" stylesheets="@../styles/style.css" text="Back to Menu" textAlignment="CENTER">

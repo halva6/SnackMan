@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 public class SceneController
 {
-    private static final Logger logger = Logger.getLogger(SceneController.class.getName());
+	private static final Logger logger = Logger.getLogger(SceneController.class.getName());
 	public static final String START_SCREEN_FXML_PATH = "/fxml/StartScreen.fxml";
 	public static final String GAME_OVER_FXML_PATH = "/fxml/GameOverScreen.fxml";
 
@@ -27,7 +27,6 @@ public class SceneController
 	public static final String LEVEL1 = "/img/ui/level1.png";
 	public static final String LEVEL2 = "/img/ui/level2.png";
 	public static final String LEVEL3 = "/img/ui/level3.png";
-
 
 	public static int LEVEL_NUMBER = 1;
 
@@ -42,7 +41,6 @@ public class SceneController
 		gameScene.setOnKeyPressed(input.getEvent());
 		gameScene.setOnKeyReleased(input.getEvent());
 		gameScene.getStylesheets().add(SceneController.class.getResource(STYLE_PATH).toExternalForm());
-
 
 		Canvas canvas = new Canvas(Controller.WIDTH * Controller.SPRITE_SIZE,
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
@@ -78,7 +76,7 @@ public class SceneController
 		}
 	}
 
-	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points)
+	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points, String time)
 	{
 		try
 		{
@@ -89,6 +87,7 @@ public class SceneController
 			GameOverScreenView gosv = fxmlLoader.getController();
 			gosv.setPointsText(points);
 			gosv.setStatusText(status);
+			gosv.setTimeText(time);
 
 			Scene screen = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);

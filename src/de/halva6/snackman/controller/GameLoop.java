@@ -12,7 +12,7 @@ import de.halva6.snackman.model.GenerateMap;
 import de.halva6.snackman.view.Input;
 import de.halva6.snackman.view.Map;
 import de.halva6.snackman.view.PauseView;
-import de.halva6.snackman.view.Score;
+import de.halva6.snackman.view.GameText;
 import de.halva6.snackman.view.sprites.AnimatedMovingSprite;
 import de.halva6.snackman.view.sprites.StaticSprite;
 import javafx.animation.AnimationTimer;
@@ -43,20 +43,24 @@ public class GameLoop
 	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>(DEFAULT_ENEMY_NUMBER);
 
 	private int scoreCount = 0;
-	private Score score;
+	private GameText scoretText;
 	private int dotCount = 0;
 	private int enemy_number = DEFAULT_ENEMY_NUMBER;
 	private boolean gameOver, win, pause, escapeBlock = false;
 
+	private GameText timeText;
+	private double playTime = 0;
+
 	private PauseView pauseView = new PauseView();
-	
+
 	private final AudioController ac;
 
 	public GameLoop(Group root, Input input, Canvas canvas)
 	{
 		this.input = input;
 		this.gc = canvas.getGraphicsContext2D();
-		this.score = new Score(gc);
+		this.scoretText = new GameText(gc, 5);
+		this.timeText = new GameText(gc, 200);
 		this.ac = new AudioController();
 
 		root.getChildren().add(pauseView.getPauseView());
@@ -120,7 +124,8 @@ public class GameLoop
 	private void gameOver()
 	{
 		String status;
-		String points = "" + scoreCount;
+		String points = "Score: " + scoreCount;
+		String time = String.format("Time: %.1f", playTime);
 		if (win)
 		{
 			status = "You won the game";
@@ -130,7 +135,7 @@ public class GameLoop
 			status = "You lost the game";
 			ac.playHuntSound();
 		}
-		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points);
+		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, time);
 	}
 
 	// executes all before the first frame will be rendered
@@ -213,6 +218,8 @@ public class GameLoop
 
 			manageCollision();
 			render(deltaTime);
+
+			playTime += deltaTime;
 		} else
 		{
 			// However, if there is a pause and the escape key is pressed and then released,
@@ -243,7 +250,8 @@ public class GameLoop
 		}
 
 		// render the score text
-		score.renderText(gc, "Score: " + this.scoreCount);
+		scoretText.renderText(gc, "Score: " + this.scoreCount);
+		timeText.renderText(gc, String.format("Time: %.1f", playTime));
 	}
 
 	// collision detection with the enemies and the dots
@@ -277,7 +285,7 @@ public class GameLoop
 
 					// removes the dot from the tile map -> will not be rendered anymore
 					tileMapSprites.remove(i);
-					
+
 					ac.playEatSound();
 				}
 			}
