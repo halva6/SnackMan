@@ -1,7 +1,5 @@
 package de.halva6.snackman.view.sprites;
 
-import javafx.geometry.Rectangle2D;
-
 public abstract class Sprite
 {
 	protected final String id;
@@ -17,14 +15,18 @@ public abstract class Sprite
 		return this.id;
 	}
 
-	public Rectangle2D getRect()
+	public double[] getRect()
 	{
-		return new Rectangle2D(p_x, p_y, getSize(), getSize());
+		return new double[] { p_x, p_y, getSize() };
 	}
 
 	public boolean collideSprite(Sprite sprite)
 	{
-		return this.getRect().intersects(sprite.getRect());
+		double[] rect = sprite.getRect();
+		boolean collisionX = this.p_x + getSize() >= rect[0] && rect[0] + rect[2] >= this.p_x;
+		boolean collisionY = this.p_y + getSize() >= rect[1] && rect[1] + rect[2] >= this.p_y;
+
+		return collisionX && collisionY;
 	}
 
 	public abstract double getSize();

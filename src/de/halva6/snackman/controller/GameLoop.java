@@ -39,8 +39,8 @@ public class GameLoop
 	private AnimatedMovingSprite player;
 	private EntityPlayer playerE;
 
-	private ArrayList<AnimatedMovingSprite> enemys = new ArrayList<>();
-	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>();
+	private ArrayList<AnimatedMovingSprite> enemys = new ArrayList<>(DEFAULT_ENEMY_NUMBER);
+	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>(DEFAULT_ENEMY_NUMBER);
 
 	private int scoreCount = 0;
 	private Score score;

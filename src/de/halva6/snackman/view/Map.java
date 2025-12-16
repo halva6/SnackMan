@@ -29,7 +29,7 @@ public class Map
 
 	public ArrayList<StaticSprite> initMap(int[][] map) throws FileNotFoundException
 	{
-		ArrayList<StaticSprite> tileMapSprites = new ArrayList<>();
+		ArrayList<StaticSprite> tileMapSprites = new ArrayList<>(map.length * map[0].length);
 		for (int y = 0; y < map.length; y++)
 		{
 			for (int x = 0; x < map[y].length; x++)
