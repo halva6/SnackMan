@@ -21,6 +21,8 @@ public class SceneController
 	private static final Logger logger = Logger.getLogger(SceneController.class.getName());
 	public static final String START_SCREEN_FXML_PATH = "/fxml/StartScreen.fxml";
 	public static final String GAME_OVER_FXML_PATH = "/fxml/GameOverScreen.fxml";
+	public static final String LEVEL_OVERVIEW_FXML_PATH = "/fxml/LevelOverview.fxml";
+
 
 	public static final String STYLE_PATH = "/styles/style.css";
 
@@ -53,7 +55,7 @@ public class SceneController
 		stage.show();
 	}
 
-	public static void startScreenScene(Node sourceNode, String scenePath)
+	public static void startScene(Node sourceNode, String scenePath)
 	{
 		try
 		{
@@ -70,10 +72,11 @@ public class SceneController
 			stage.show();
 		} catch (IOException e)
 		{
-			logger.log(Level.SEVERE, "Failed to load start screen scene", e);
+			logger.log(Level.SEVERE, "Failed to load " + scenePath + " - scene", e);
 			System.exit(0);
 		}
 	}
+	
 
 	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points, String time)
 	{

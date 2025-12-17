@@ -24,6 +24,9 @@ public class LevelLoader
 	private final static String LEVEL_XML_PATH = "/level/leveldata.xml";
 	private static final String EXTERNAL_STATS_PATH = System.getProperty("user.home") + "/.snackman/levelstats.xml";
 
+	private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+	private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
+
 	public static LevelData loadLevelById(int levelId)
 	{
 		levelNumber = levelId;
@@ -32,8 +35,7 @@ public class LevelLoader
 			// load XML
 			InputStream is = LevelLoader.class.getResourceAsStream(LEVEL_XML_PATH);
 
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
 
 			Document document = builder.parse(is);
 			document.getDocumentElement().normalize();
@@ -51,7 +53,7 @@ public class LevelLoader
 
 				if (levelId == id)
 				{
-					return parseLevel(levelElement);
+					return parseLevel(levelElement, id);
 				}
 			}
 
@@ -63,9 +65,8 @@ public class LevelLoader
 		return null;
 	}
 
-	private static LevelData parseLevel(Element levelElement)
+	private static LevelData parseLevel(Element levelElement, int id)
 	{
-		int levelId = getInt(levelElement, "levelId");
 
 		Element playerStart = (Element) levelElement.getElementsByTagName("playerStartPosition").item(0);
 
@@ -91,8 +92,10 @@ public class LevelLoader
 		int score = getInt(levelElement, "score");
 		int time = getInt(levelElement, "bestTimeSeconds");
 
-		LevelData ld = new LevelData(levelId, playerStartX, playerStartY, enemyStartX, enemyStartY, tilesPath, score,
-				time);
+		int[] ownStats = LevelLoader.loadExternalLevelStats(id);
+
+		LevelData ld = new LevelData(id, playerStartX, playerStartY, enemyStartX, enemyStartY, tilesPath, score, time,
+				ownStats[0], ownStats[1]);
 
 		return ld;
 	}
@@ -101,7 +104,7 @@ public class LevelLoader
 	{
 		return Integer.parseInt(getText(parent, tag));
 	}
-	
+
 	private static String getText(Element parent, String tag)
 	{
 		return parent.getElementsByTagName(tag).item(0).getTextContent().trim();
@@ -114,8 +117,7 @@ public class LevelLoader
 			File file = new File(EXTERNAL_STATS_PATH);
 			file.getParentFile().mkdirs();
 
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
 			Document document;
 
 			if (file.exists())
@@ -155,7 +157,7 @@ public class LevelLoader
 			setOrCreate(document, levelElement, "highscore", String.valueOf(highscore));
 			setOrCreate(document, levelElement, "bestTimeSeconds", String.valueOf(bestTimeSeconds));
 
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Transformer transformer = TRANSFORMER_FACTORY.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 			transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream(file)));
@@ -193,7 +195,7 @@ public class LevelLoader
 			if (!file.exists())
 				return result;
 
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
 			Document document = builder.parse(new FileInputStream(file));
 			document.getDocumentElement().normalize();
 
@@ -222,4 +224,36 @@ public class LevelLoader
 		return result;
 	}
 
+	public static int[][] loadAllExternalLevelStats(int numberOfLevels)
+	{
+		int[][] result = new int[numberOfLevels][2];
+		try
+		{
+			File file = new File(EXTERNAL_STATS_PATH);
+			if (!file.exists())
+				return null;
+
+			DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
+			Document document = builder.parse(new FileInputStream(file));
+			document.getDocumentElement().normalize();
+
+			NodeList levelNodes = document.getElementsByTagName("level");
+
+			for (int i = 0; i < levelNodes.getLength(); i++)
+			{
+				Element levelElement = (Element) levelNodes.item(i);
+
+				result[i][0] = Integer
+						.parseInt(levelElement.getElementsByTagName("highscore").item(0).getTextContent());
+				result[i][1] = Integer
+						.parseInt(levelElement.getElementsByTagName("bestTimeSeconds").item(0).getTextContent());
+			}
+
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 }

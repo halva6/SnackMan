@@ -5,7 +5,6 @@
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
@@ -18,16 +17,8 @@
                   <Bloom />
                </effect>
             </ImageView>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button id="level1-button" fx:id="level1Button" mnemonicParsing="false" onAction="#startLevel1" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
-                  </Button>
-                  <Button id="level2-button" fx:id="level2Button" mnemonicParsing="false" onAction="#startLevel2" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
-                  </Button>
-                  <Button id="level3-button" fx:id="level3Button" mnemonicParsing="false" onAction="#startLevel3" styleClass="level-button-style" stylesheets="@../styles/style.css" text="" textAlignment="CENTER">
-                  </Button>
-               </children>
-            </HBox>
+            <Button fx:id="levelSelection" mnemonicParsing="false" onAction="#gotToLevelSelection" styleClass="button-style" text="Levels" />
+            <Button fx:id="exitGame" mnemonicParsing="false" onAction="#quitGame" styleClass="button-style" text="Exit Game" />
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

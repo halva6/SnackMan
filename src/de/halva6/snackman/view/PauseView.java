@@ -44,7 +44,7 @@ public class PauseView
 		});
 
 		backMenu.setOnAction(event -> {
-			SceneController.startScreenScene((Node) event.getSource(), SceneController.START_SCREEN_FXML_PATH);
+			SceneController.startScene((Node) event.getSource(), SceneController.START_SCREEN_FXML_PATH);
 			exitGame = true;
 		});
 		backGame.setOnAction(event -> exitPause = true);

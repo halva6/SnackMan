@@ -68,7 +68,7 @@ public class GameLoop
 		this.ac = new AudioController();
 
 		this.levelData = levelData;
-		this.enemyNumber = levelData.getEnemyStartX().length;
+		this.enemyNumber = levelData.enemyStartX().length;
 
 		root.getChildren().add(pauseView.getPauseView());
 
@@ -144,9 +144,10 @@ public class GameLoop
 			ac.playHuntSound();
 		}
 
-		if (levelData.getCurrentBestTime() >= playTime && levelData.getCurrentHighScore() >= scoreCount)
+		if (levelData.currentHighScore() <= scoreCount
+				|| levelData.currentHighScore() == scoreCount && levelData.currentBestTime() >= playTime)
 		{
-			LevelLoader.saveExternalLevelStats(this.levelData.getLevelId(), scoreCount, (int) Math.round(playTime));
+			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, (int) Math.round(playTime));
 		}
 
 		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, time);
@@ -155,7 +156,7 @@ public class GameLoop
 	// executes all before the first frame will be rendered
 	private void awake()
 	{
-		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.getTileFilePath());
+		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.tileFilePath());
 		try
 		{
 			Map map = new Map();
@@ -163,14 +164,14 @@ public class GameLoop
 			this.dotCount = map.getDotCount();
 
 			// start pos from level data --> from the level.xml
-			this.playerE = new EntityPlayer(levelData.getPlayerStartX(), levelData.getPlayerStartY(), Direction.DOWN,
+			this.playerE = new EntityPlayer(levelData.playerStartX(), levelData.playerStartY(), Direction.DOWN,
 					gm.getMap());
 			this.player = new AnimatedMovingSprite(Controller.PACMAN_PATH, playerE.getPosX(), playerE.getPosX(), 6);
 
 			for (int i = 0; i < enemyNumber; i++)
 			{
-				int enemyStartX = levelData.getEnemyStartX()[i];
-				int enemyStartY = levelData.getEnemyStartY()[i];
+				int enemyStartX = levelData.enemyStartX()[i];
+				int enemyStartY = levelData.enemyStartY()[i];
 
 				EntityEnemy ee = new EntityEnemy(enemyStartX, enemyStartY, gm.getMap());
 				AnimatedMovingSprite e = new AnimatedMovingSprite(Controller.GHOST_PATH, enemyStartX, enemyStartY, 6);

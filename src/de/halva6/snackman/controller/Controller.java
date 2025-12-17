@@ -15,15 +15,14 @@ public class Controller extends Application
 	public static final int HEIGHT = 25;
 	public static final int SPRITE_SIZE = 32;
 	public static final int SCORE_HEIGHT = 30;
-	
+
 	public static final String TILEMAP_PATH = "/img/tiles/";
-	
+
 	public static final String PACMAN_PATH = "/img/pacman/";
 	public static final double PACMAN_ANIMATION_DUARTION = 0.1;
-	
+
 	public static final String GHOST_PATH = "/img/ghost/";
 	public static final double GHOST_ANIMATION_DUARTION = 0.2;
-
 
 	@Override
 	public void start(Stage stage)
@@ -35,11 +34,9 @@ public class Controller extends Application
 			Pane root = fxmlLoader.load();
 			Scene scene = new Scene(root, Controller.WIDTH * Controller.SPRITE_SIZE,
 					Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
-			
-			scene.getStylesheets().add(
-			        getClass().getResource(SceneController.STYLE_PATH).toExternalForm());
 
-			
+			scene.getStylesheets().add(getClass().getResource(SceneController.STYLE_PATH).toExternalForm());
+
 			stage.setScene(scene);
 			stage.setTitle("SnackMan");
 			stage.show();
