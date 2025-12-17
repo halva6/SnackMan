@@ -2,6 +2,8 @@ package de.halva6.snackman.view;
 
 import de.halva6.snackman.controller.Controller;
 import de.halva6.snackman.controller.SceneController;
+import de.halva6.snackman.model.level.LevelData;
+import de.halva6.snackman.model.level.LevelLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -31,11 +33,13 @@ public class PauseView
 		root.getChildren().add(restart);
 		root.getChildren().add(backMenu);
 		root.getChildren().add(backGame);
-		
-		
 
 		restart.setOnAction(event -> {
-			SceneController.gameScene((Node) event.getSource());
+			LevelData levelData = LevelLoader.loadLevelById(LevelLoader.levelNumber);
+			if (levelData != null)
+			{
+				SceneController.gameScene((Node) event.getSource(), levelData);
+			}
 			exitGame = true;
 		});
 

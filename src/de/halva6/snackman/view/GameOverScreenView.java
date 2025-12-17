@@ -1,6 +1,8 @@
 package de.halva6.snackman.view;
 
 import de.halva6.snackman.controller.SceneController;
+import de.halva6.snackman.model.level.LevelData;
+import de.halva6.snackman.model.level.LevelLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -33,7 +35,11 @@ public class GameOverScreenView
 	@FXML
 	public void restartGame(ActionEvent event)
 	{
-		SceneController.gameScene((Node) event.getSource());
+		LevelData levelData = LevelLoader.loadLevelById(LevelLoader.levelNumber);
+		if (levelData != null)
+		{
+			SceneController.gameScene((Node) event.getSource(), levelData);
+		}
 	}
 
 	@FXML

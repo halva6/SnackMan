@@ -8,7 +8,9 @@ import java.util.logging.Logger;
 import de.halva6.snackman.model.Direction;
 import de.halva6.snackman.model.EntityEnemy;
 import de.halva6.snackman.model.EntityPlayer;
-import de.halva6.snackman.model.GenerateMap;
+import de.halva6.snackman.model.level.GenerateMap;
+import de.halva6.snackman.model.level.LevelData;
+import de.halva6.snackman.model.level.LevelLoader;
 import de.halva6.snackman.view.Input;
 import de.halva6.snackman.view.Map;
 import de.halva6.snackman.view.PauseView;
@@ -24,7 +26,6 @@ import javafx.scene.canvas.GraphicsContext;
 public class GameLoop
 {
 	private static final Logger logger = Logger.getLogger(GameLoop.class.getName());
-	private static final int DEFAULT_ENEMY_NUMBER = 3;
 	private static final double FIXED_DELTA_TIME = 0.005; // like the fps
 
 	private long lastUpdate = 0;
@@ -34,18 +35,21 @@ public class GameLoop
 	private double accumulator = 0;
 
 	private GraphicsContext gc;
+
+	private LevelData levelData;
+
 	private ArrayList<StaticSprite> tileMapSprites;
 
 	private AnimatedMovingSprite player;
 	private EntityPlayer playerE;
 
-	private ArrayList<AnimatedMovingSprite> enemys = new ArrayList<>(DEFAULT_ENEMY_NUMBER);
-	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>(DEFAULT_ENEMY_NUMBER);
+	private final int enemyNumber;
+	private ArrayList<AnimatedMovingSprite> enemys = new ArrayList<>();
+	private ArrayList<EntityEnemy> enemeyE = new ArrayList<>();
 
 	private int scoreCount = 0;
 	private GameText scoretText;
 	private int dotCount = 0;
-	private int enemy_number = DEFAULT_ENEMY_NUMBER;
 	private boolean gameOver, win, pause, escapeBlock = false;
 
 	private GameText timeText;
@@ -55,13 +59,16 @@ public class GameLoop
 
 	private final AudioController ac;
 
-	public GameLoop(Group root, Input input, Canvas canvas)
+	public GameLoop(Group root, Input input, Canvas canvas, LevelData levelData)
 	{
 		this.input = input;
 		this.gc = canvas.getGraphicsContext2D();
 		this.scoretText = new GameText(gc, 5);
 		this.timeText = new GameText(gc, 200);
 		this.ac = new AudioController();
+
+		this.levelData = levelData;
+		this.enemyNumber = levelData.getEnemyStartX().length;
 
 		root.getChildren().add(pauseView.getPauseView());
 
@@ -126,6 +133,7 @@ public class GameLoop
 		String status;
 		String points = "Score: " + scoreCount;
 		String time = String.format("Time: %.1f", playTime);
+
 		if (win)
 		{
 			status = "You won the game";
@@ -135,25 +143,37 @@ public class GameLoop
 			status = "You lost the game";
 			ac.playHuntSound();
 		}
+
+		if (levelData.getCurrentBestTime() >= playTime && levelData.getCurrentHighScore() >= scoreCount)
+		{
+			LevelLoader.saveExternalLevelStats(this.levelData.getLevelId(), scoreCount, (int) Math.round(playTime));
+		}
+
 		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, time);
 	}
 
 	// executes all before the first frame will be rendered
 	private void awake()
 	{
-		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT);
+		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.getTileFilePath());
 		try
 		{
 			Map map = new Map();
 			this.tileMapSprites = map.initMap(gm.getMap());
 			this.dotCount = map.getDotCount();
-			this.player = new AnimatedMovingSprite(Controller.PACMAN_PATH, 1, 1, 6);
-			this.playerE = new EntityPlayer(1, 1, Direction.DOWN, gm.getMap());
 
-			for (int i = 0; i < this.enemy_number; i++)
+			// start pos from level data --> from the level.xml
+			this.playerE = new EntityPlayer(levelData.getPlayerStartX(), levelData.getPlayerStartY(), Direction.DOWN,
+					gm.getMap());
+			this.player = new AnimatedMovingSprite(Controller.PACMAN_PATH, playerE.getPosX(), playerE.getPosX(), 6);
+
+			for (int i = 0; i < enemyNumber; i++)
 			{
-				AnimatedMovingSprite e = new AnimatedMovingSprite(Controller.GHOST_PATH, 12, 11, 6);
-				EntityEnemy ee = new EntityEnemy(12, 11, gm.getMap());
+				int enemyStartX = levelData.getEnemyStartX()[i];
+				int enemyStartY = levelData.getEnemyStartY()[i];
+
+				EntityEnemy ee = new EntityEnemy(enemyStartX, enemyStartY, gm.getMap());
+				AnimatedMovingSprite e = new AnimatedMovingSprite(Controller.GHOST_PATH, enemyStartX, enemyStartY, 6);
 
 				this.enemys.add(e);
 				this.enemeyE.add(ee);
@@ -208,7 +228,7 @@ public class GameLoop
 			player.moveSprite(playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection(), playerE.isMoving());
 
 			// move the enemies
-			for (int i = 0; i < this.enemy_number; i++)
+			for (int i = 0; i < enemyNumber; i++)
 			{
 				AnimatedMovingSprite e = this.enemys.get(i);
 				EntityEnemy ee = this.enemeyE.get(i);

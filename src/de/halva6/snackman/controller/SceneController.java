@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.halva6.snackman.model.level.LevelData;
 import de.halva6.snackman.view.GameOverScreenView;
 import de.halva6.snackman.view.Input;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +29,7 @@ public class SceneController
 	public static final String LEVEL2 = "/img/ui/level2.png";
 	public static final String LEVEL3 = "/img/ui/level3.png";
 
-	public static int LEVEL_NUMBER = 1;
-
-	public static void gameScene(Node sourceNode)
+	public static void gameScene(Node sourceNode, LevelData levelData)
 	{
 		Group root = new Group();
 
@@ -45,9 +44,9 @@ public class SceneController
 		Canvas canvas = new Canvas(Controller.WIDTH * Controller.SPRITE_SIZE,
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 		root.getChildren().add(canvas);
-
+		
 		@SuppressWarnings("unused")
-		GameLoop gameLoop = new GameLoop(root, input, canvas);
+		GameLoop gameLoop = new GameLoop(root, input, canvas, levelData);
 
 		Stage stage = (Stage) sourceNode.getScene().getWindow();
 		stage.setScene(gameScene);

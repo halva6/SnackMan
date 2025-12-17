@@ -6,6 +6,7 @@ module SnackMan
 	requires javafx.base;
 	requires java.logging;
 	requires javafx.media;
+    requires java.xml;
 	opens de.halva6.snackman.controller to javafx.graphics, javafx.fxml;
 	opens de.halva6.snackman.view to javafx.fxml;
 }
