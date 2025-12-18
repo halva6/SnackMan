@@ -27,9 +27,8 @@ public class SceneController
 	public static final String STYLE_PATH = "/styles/style.css";
 
 	public static final String MAIN_IMAGE = "/img/ui/play_snackman.png";
-	public static final String LEVEL1 = "/img/ui/level1.png";
-	public static final String LEVEL2 = "/img/ui/level2.png";
-	public static final String LEVEL3 = "/img/ui/level3.png";
+	public static final String LEVEL_BUTTONS = "/img/ui/";
+	public static final String LOCK_IMAGE = "/img/ui/Lock.png";
 
 	public static void gameScene(Node sourceNode, LevelData levelData)
 	{

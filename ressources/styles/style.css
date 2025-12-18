@@ -61,3 +61,12 @@
 {
 	-fx-font-size: 14.0px;
 }
+
+.information-text
+{
+	-fx-fill: #d8d038;
+	-fx-font-family: "DejaVu Sans";
+    -fx-alignment: CENTER;
+	-fx-font-weight: BOLD;
+	-fx-font-size: 14.0px;
+}

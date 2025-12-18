@@ -110,7 +110,7 @@ public class LevelLoader
 		return parent.getElementsByTagName(tag).item(0).getTextContent().trim();
 	}
 
-	public static void saveExternalLevelStats(int levelId, int highscore, int bestTimeSeconds)
+	public static void saveExternalLevelStats(int levelId, int highscore, int bestTimeSeconds, int locked)
 	{
 		try
 		{
@@ -156,6 +156,7 @@ public class LevelLoader
 
 			setOrCreate(document, levelElement, "highscore", String.valueOf(highscore));
 			setOrCreate(document, levelElement, "bestTimeSeconds", String.valueOf(bestTimeSeconds));
+			setOrCreate(document, levelElement, "locked", String.valueOf(locked));
 
 			Transformer transformer = TRANSFORMER_FACTORY.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -187,7 +188,7 @@ public class LevelLoader
 
 	public static int[] loadExternalLevelStats(int levelId)
 	{
-		int[] result = new int[] { 0, 0 }; // [0] = highscore, [1] = time
+		int[] result = new int[] { 0, 0, 0 }; // [0] = highscore, [1] = time
 
 		try
 		{
@@ -212,6 +213,8 @@ public class LevelLoader
 							.parseInt(levelElement.getElementsByTagName("highscore").item(0).getTextContent());
 					result[1] = Integer
 							.parseInt(levelElement.getElementsByTagName("bestTimeSeconds").item(0).getTextContent());
+					result[2] = Integer.parseInt(levelElement.getElementsByTagName("locked").item(0).getTextContent());
+
 					break;
 				}
 			}
@@ -226,12 +229,12 @@ public class LevelLoader
 
 	public static int[][] loadAllExternalLevelStats(int numberOfLevels)
 	{
-		int[][] result = new int[numberOfLevels][2];
+		int[][] result = new int[numberOfLevels][3];
 		try
 		{
 			File file = new File(EXTERNAL_STATS_PATH);
 			if (!file.exists())
-				return null;
+				return result;
 
 			DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
 			Document document = builder.parse(new FileInputStream(file));
@@ -247,6 +250,8 @@ public class LevelLoader
 						.parseInt(levelElement.getElementsByTagName("highscore").item(0).getTextContent());
 				result[i][1] = Integer
 						.parseInt(levelElement.getElementsByTagName("bestTimeSeconds").item(0).getTextContent());
+
+				result[i][2] = Integer.parseInt(levelElement.getElementsByTagName("locked").item(0).getTextContent());
 			}
 
 		} catch (Exception e)

@@ -3,13 +3,16 @@ package de.halva6.snackman.view;
 import de.halva6.snackman.controller.SceneController;
 import de.halva6.snackman.model.level.LevelData;
 import de.halva6.snackman.model.level.LevelLoader;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class LevelOverviewScreen
 {
@@ -35,58 +38,56 @@ public class LevelOverviewScreen
 	private Text bt3;
 
 	@FXML
+	private Text informationText;
+
+	@FXML
 	private Button mainScreen;
+
+	private int[][] statsValues;
 
 	@FXML
 	public void startLevel1(ActionEvent event)
 	{
-		startLeve(event, 1);
+		startLevel(event, 1);
 	}
 
 	@FXML
 	public void startLevel2(ActionEvent event)
 	{
-		startLeve(event, 2);
+		startLevel(event, 2);
 	}
 
 	@FXML
 	public void startLevel3(ActionEvent event)
 	{
-		startLeve(event, 3);
+		startLevel(event, 3);
 	}
 
-	private void startLeve(ActionEvent event, int level)
+	private void startLevel(ActionEvent event, int level)
 	{
 		LevelData levelData = LevelLoader.loadLevelById(level);
 
 		if (levelData != null)
 		{
-			if (isAvailable(level, levelData))
+			if (level > 1)
+			{
+				if (statsValues[level - 2][2] != 0)
+				{
+					SceneController.gameScene((Node) event.getSource(), levelData);
+				} else
+				{
+					informationText
+							.setText("You must first complete the previous level in " + levelData.time() + " seconds.");
+					FadeTransition ft = new FadeTransition(Duration.seconds(5), informationText);
+					ft.setFromValue(1); // start: invisible
+					ft.setToValue(0); // end: visible
+					ft.play();
+				}
+			} else
 			{
 				SceneController.gameScene((Node) event.getSource(), levelData);
 			}
 		}
-	}
-
-	private boolean isAvailable(int level, LevelData levelData)
-	{
-		if (level > 1)
-		{
-			level--;
-			// these are the stats specified in the level.xml file to check if the level has
-			// already been unlocked
-			int[] lastStats = LevelLoader.loadExternalLevelStats(level);
-
-			if (lastStats[0] >= levelData.score() && lastStats[1] <= levelData.time())
-			{
-				return true;
-			}
-		} else
-		{
-			return true;
-		}
-
-		return false;
 	}
 
 	@FXML
@@ -98,39 +99,42 @@ public class LevelOverviewScreen
 	@FXML
 	public void initialize()
 	{
-		Image level1 = new Image(getClass().getResourceAsStream(SceneController.LEVEL1));
-		Image level2 = new Image(getClass().getResourceAsStream(SceneController.LEVEL2));
-		Image level3 = new Image(getClass().getResourceAsStream(SceneController.LEVEL3));
+		Button[] levelButtons = new Button[] { level1Button, level2Button, level3Button };
+		Text[] highScoreTexts = new Text[] { hs1, hs2, hs3 };
+		Text[] bestTimeTexts = new Text[] { bt1, bt2, bt3 };
 
-		ImageView ivLevel1 = new ImageView(level1);
-		ImageView ivLevel2 = new ImageView(level2);
-		ImageView ivLevel3 = new ImageView(level3);
+		int numberOfLevels = levelButtons.length;
+		statsValues = LevelLoader.loadAllExternalLevelStats(numberOfLevels);
 
-		ivLevel1.setFitHeight(32);
-		ivLevel2.setFitHeight(32);
-		ivLevel3.setFitHeight(32);
+		for (int i = 0; i < numberOfLevels; i++)
+		{
+			Image levelImg = new Image(
+					getClass().getResourceAsStream(SceneController.LEVEL_BUTTONS + (i + 1) + ".png"));
+			ImageView ivLevel = new ImageView(levelImg);
+			ivLevel.setFitHeight(32);
+			ivLevel.setPreserveRatio(true);
 
-		ivLevel1.setPreserveRatio(true);
-		ivLevel2.setPreserveRatio(true);
-		ivLevel3.setPreserveRatio(true);
+			if (i > 0)
+			{
+				if (statsValues[i - 1][2] == 0)
+				{
+					ColorAdjust gray = new ColorAdjust();
+					gray.setSaturation(-1);
 
-		this.level1Button.setGraphic(ivLevel1);
-		this.level2Button.setGraphic(ivLevel2);
-		this.level3Button.setGraphic(ivLevel3);
+					ivLevel.setEffect(gray);
+					ivLevel.setOpacity(0.7);
+				}
+			}
 
-		int[][] statsValues = LevelLoader.loadAllExternalLevelStats(3);
+			levelButtons[i].setGraphic(ivLevel);
 
-		hs1.setText(setDispayString(statsValues[0][0], "Highscore"));
-		hs2.setText(setDispayString(statsValues[1][0], "Highscore"));
-		hs3.setText(setDispayString(statsValues[2][0], "Highscore"));
-
-		bt1.setText(setDispayString(statsValues[0][1], "Time"));
-		bt2.setText(setDispayString(statsValues[1][1], "Time"));
-		bt3.setText(setDispayString(statsValues[2][1], "Time"));
+			highScoreTexts[i].setText(statsValues[i][0] + "");
+			bestTimeTexts[i].setText(setDispayString(statsValues[i][1], "Time"));
+		}
 	}
 
 	private String setDispayString(int value, String text)
 	{
-		return value == 0 ? text + ": /" : text + ": " + value;
+		return value == 0 ? text + ": /" : text + ": " + value + " s";
 	}
 }

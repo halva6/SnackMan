@@ -147,7 +147,7 @@ public class GameLoop
 		if (levelData.currentHighScore() <= scoreCount
 				|| levelData.currentHighScore() == scoreCount && levelData.currentBestTime() >= playTime)
 		{
-			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, (int) Math.round(playTime));
+			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, (int) Math.round(playTime), levelData.nextLevelAvailable());
 		}
 
 		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, time);
