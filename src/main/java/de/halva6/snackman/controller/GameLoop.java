@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.halva6.snackman.model.Direction;
+import de.halva6.snackman.model.DangerousEntityEnemy;
 import de.halva6.snackman.model.EntityEnemy;
 import de.halva6.snackman.model.EntityPlayer;
 import de.halva6.snackman.model.level.GenerateMap;
@@ -173,7 +174,17 @@ public class GameLoop
 				int enemyStartX = levelData.enemyStartX()[i];
 				int enemyStartY = levelData.enemyStartY()[i];
 
-				EntityEnemy ee = new EntityEnemy(enemyStartX, enemyStartY, gm.getMap());
+				EntityEnemy ee;
+
+				// first enemy is dangerous (hunts the player), others are random
+				if (i == 0)
+				{
+					ee = new DangerousEntityEnemy(enemyStartX, enemyStartY, gm.getMap(), playerE);
+				} else
+				{
+					ee = new EntityEnemy(enemyStartX, enemyStartY, gm.getMap());
+				}
+
 				AnimatedMovingSprite e = new AnimatedMovingSprite(Controller.GHOST_PATH, enemyStartX, enemyStartY, 6);
 
 				this.enemys.add(e);
