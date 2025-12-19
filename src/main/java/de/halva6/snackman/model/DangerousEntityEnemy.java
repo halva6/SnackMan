@@ -1,5 +1,7 @@
 package de.halva6.snackman.model;
 
+import java.util.Random;
+
 import de.halva6.snackman.controller.Controller;
 import de.halva6.snackman.view.Map;
 
@@ -10,11 +12,37 @@ import de.halva6.snackman.view.Map;
 public class DangerousEntityEnemy extends EntityEnemy
 {
 	private EntityPlayer player;
+	private double intelligence; // 0.0 = completely random, 1.0 = always hunts perfectly
+	private Random random;
 
+	/**
+	 * Creates a dangerous enemy with default intelligence (0.7).
+	 * 
+	 * @param m_x Starting X position in grid coordinates
+	 * @param m_y Starting Y position in grid coordinates
+	 * @param map The game map
+	 * @param player The player to hunt
+	 */
 	public DangerousEntityEnemy(int m_x, int m_y, int[][] map, EntityPlayer player)
+	{
+		this(m_x, m_y, map, player, 0.7);
+	}
+
+	/**
+	 * Creates a dangerous enemy with configurable intelligence.
+	 * 
+	 * @param m_x Starting X position in grid coordinates
+	 * @param m_y Starting Y position in grid coordinates
+	 * @param map The game map
+	 * @param player The player to hunt
+	 * @param intelligence How smart the enemy is (0.0 = random, 1.0 = perfect hunter)
+	 */
+	public DangerousEntityEnemy(int m_x, int m_y, int[][] map, EntityPlayer player, double intelligence)
 	{
 		super(m_x, m_y, map);
 		this.player = player;
+		this.intelligence = Math.max(0.0, Math.min(1.0, intelligence)); // Clamp between 0 and 1
+		this.random = new Random();
 	}
 
 	@Override
@@ -30,13 +58,25 @@ public class DangerousEntityEnemy extends EntityEnemy
 			// Check if there's a wall in front
 			frontWall = wallCollision(entityDirection);
 
-			// At intersections or when blocked, choose the best direction toward player
+			// At intersections or when blocked, decide between smart hunting and random movement
 			if (frontWall || isAtIntersection())
 			{
-				Direction bestDirection = findBestDirectionToPlayer();
-				if (bestDirection != null)
+				Direction newDirection;
+				
+				// Use intelligence to decide: random number < intelligence = hunt, else = random
+				if (random.nextDouble() < intelligence)
 				{
-					entityDirection = bestDirection;
+					// Smart mode: hunt the player
+					newDirection = findBestDirectionToPlayer();
+				} else
+				{
+					// Random mode: move randomly
+					newDirection = getRandomValidDirection();
+				}
+				
+				if (newDirection != null)
+				{
+					entityDirection = newDirection;
 					frontWall = false; // We found a valid direction
 				}
 			}
@@ -54,6 +94,44 @@ public class DangerousEntityEnemy extends EntityEnemy
 		
 		this.p_x += speed_x;
 		this.p_y += speed_y;
+	}
+
+	/**
+	 * Gets a random valid direction (avoiding walls and preferring not to go backward).
+	 */
+	private Direction getRandomValidDirection()
+	{
+		Direction oppositeDirection = getOppositeDirection(entityDirection);
+		Direction[] directions = Direction.values();
+		Direction[] validDirections = new Direction[4];
+		int validCount = 0;
+
+		// Collect all valid directions
+		for (Direction dir : directions)
+		{
+			if (!wallCollision(dir))
+			{
+				validDirections[validCount++] = dir;
+			}
+		}
+
+		if (validCount == 0)
+		{
+			return null; // No valid directions
+		}
+
+		// Try to pick a random direction that's not backward
+		for (int attempt = 0; attempt < 3; attempt++)
+		{
+			Direction candidate = validDirections[random.nextInt(validCount)];
+			if (candidate != oppositeDirection)
+			{
+				return candidate;
+			}
+		}
+
+		// If we couldn't avoid going backward, just return any valid direction
+		return validDirections[random.nextInt(validCount)];
 	}
 
 	/**

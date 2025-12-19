@@ -177,9 +177,10 @@ public class GameLoop
 				EntityEnemy ee;
 
 				// first enemy is dangerous (hunts the player), others are random
+				// intelligence: 0.0 = random, 1.0 = perfect hunter, 0.5 = balanced
 				if (i == 0)
 				{
-					ee = new DangerousEntityEnemy(enemyStartX, enemyStartY, gm.getMap(), playerE);
+					ee = new DangerousEntityEnemy(enemyStartX, enemyStartY, gm.getMap(), playerE, 0.5);
 				} else
 				{
 					ee = new EntityEnemy(enemyStartX, enemyStartY, gm.getMap());
