@@ -1,7 +1,6 @@
 package de.halva6.snackman.view;
 
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 public class Input
@@ -11,53 +10,31 @@ public class Input
 
 	public Input()
 	{
-		EventHandler<KeyEvent> event = new EventHandler<KeyEvent>()
+		this.event = keyEvent ->
 		{
-			@Override
-			public void handle(KeyEvent keyEvent)
+			boolean isPressed = keyEvent.getEventType() == KeyEvent.KEY_PRESSED;
+
+			switch (keyEvent.getCode())
 			{
-				boolean keyCode = false;
-				if (keyEvent.getEventType() == KeyEvent.KEY_PRESSED)
-				{
-					keyCode = true;
-				}
-
-				switch (keyEvent.getCode())
-				{
-				case KeyCode.W:
-					up = keyCode;
-					break;
-				case KeyCode.S:
-					down = keyCode;
-					break;
-				case KeyCode.A:
-					left = keyCode;
-					break;
-				case KeyCode.D:
-					right = keyCode;
-					break;
-				case KeyCode.UP:
-					up = keyCode;
-					break;
-				case KeyCode.DOWN:
-					down = keyCode;
-					break;
-				case KeyCode.LEFT:
-					left = keyCode;
-					break;
-				case KeyCode.RIGHT:
-					right = keyCode;
-					break;
-				case KeyCode.ESCAPE:
-					escape = keyCode;
-				default:
-					break;
-				}
-
+			case W, UP:
+				up = isPressed;
+				break;
+			case S, DOWN:
+				down = isPressed;
+				break;
+			case A, LEFT:
+				left = isPressed;
+				break;
+			case D, RIGHT:
+				right = isPressed;
+				break;
+			case ESCAPE:
+				escape = isPressed;
+				break;
+			default:
+				break;
 			}
 		};
-
-		this.event = event;
 	}
 
 	public boolean isUp()
@@ -79,8 +56,8 @@ public class Input
 	{
 		return right;
 	}
-	
-	public boolean isEscape() 
+
+	public boolean isEscape()
 	{
 		return escape;
 	}
