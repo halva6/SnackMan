@@ -45,7 +45,7 @@ public class SceneController
 		Canvas canvas = new Canvas(Controller.WIDTH * Controller.SPRITE_SIZE,
 				Controller.HEIGHT * Controller.SPRITE_SIZE + Controller.SCORE_HEIGHT);
 		root.getChildren().add(canvas);
-		
+
 		@SuppressWarnings("unused")
 		GameLoop gameLoop = new GameLoop(root, input, canvas, levelData);
 
@@ -75,7 +75,7 @@ public class SceneController
 			System.exit(0);
 		}
 	}
-	
+
 
 	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points, String time)
 	{

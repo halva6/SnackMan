@@ -1,0 +1,72 @@
+.pane {
+    -fx-background-color: #000000;
+}
+
+.button-style
+{
+    -fx-background-color: transparent;
+	-fx-border-color: #0a728d;
+	-fx-border-width: 2.0;
+	-fx-text-fill: #0a728d;
+	-fx-font-family: "DejaVu Sans";
+	-fx-font-size: 18.0px;
+	-fx-font-weight: BOLD;
+}
+
+.level-button-style
+{
+	-fx-background-size: contain;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-padding: 20.0;
+}
+
+.level-button-style:hover, .button-style:hover
+{
+	-fx-background-color: rgba(10.0, 114.0, 141.0, 0.2);
+}
+
+.level-button-style:pressed, .button-style:pressed
+{
+	-fx-background-color: rgba(10.0, 114.0, 141.0, 0.3);
+}
+
+.semi-transparent-pane
+{
+	-fx-background-color: rgba(0.0,0.0,0.0,0.85);
+}
+
+.heading-text, .normal-text, .small-text
+{
+	-fx-fill: #0a728d;
+	-fx-font-family: "DejaVu Sans";
+    -fx-alignment: CENTER;
+	-fx-font-weight: BOLD;
+}
+
+.heading-text
+{
+	-fx-font-size: 44.0px;
+	-fx-underline: true;
+}
+
+.normal-text
+{
+	-fx-font-size: 24.0px;
+}
+
+.small-text
+{
+	-fx-font-size: 14.0px;
+}
+
+.information-text
+{
+	-fx-fill: #d8d038;
+	-fx-font-family: "DejaVu Sans";
+    -fx-alignment: CENTER;
+	-fx-font-weight: BOLD;
+	-fx-font-size: 14.0px;
+}

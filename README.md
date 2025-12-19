@@ -9,6 +9,10 @@ The game is built around a tile-based map.
 A player entity moves through the map, collects food dots, and avoids enemy entities.  
 The game ends when all dots are collected or when the player collides with an enemy.
 
+## Installation
+
+Run ```mvn clean javafx:jlink``` to create a distribution packed with a standalone jre.
+
 ## Game Loop and Animation
 
 The game loop is implemented using JavaFX’s `AnimationTimer`.
