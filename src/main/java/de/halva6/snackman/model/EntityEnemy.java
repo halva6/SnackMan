@@ -23,12 +23,12 @@ public class EntityEnemy extends Entity
 		boolean wall = false;
 		boolean tunnel = false;
 
-		this.reqDirection = getRandomDirection();
-
 		if (this.p_y % Controller.SPRITE_SIZE == 0 && this.p_x % Controller.SPRITE_SIZE == 0)
 		{
-			m_x = (int) this.p_x / Controller.SPRITE_SIZE;
-			m_y = (int) this.p_y / Controller.SPRITE_SIZE;
+			m_x = this.p_x / Controller.SPRITE_SIZE;
+			m_y = this.p_y / Controller.SPRITE_SIZE;
+
+			// check if in a tunnel
 			if ((map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER)
 					|| (map[m_y][m_x - 1] < Map.SNACK_NUMBER && map[m_y][m_x + 1] < Map.SNACK_NUMBER))
 			{
@@ -37,18 +37,24 @@ public class EntityEnemy extends Entity
 
 			frontWall = wallCollision(entityDirection);
 
-			wall = wallCollision(reqDirection);
-
 			if (tunnel && frontWall)
 			{
-				entityDirection = deadEndDirection();
+				Direction newDirection = deadEndDirection();
+				if (newDirection != null)
+				{
+					entityDirection = newDirection;
+				}
 			}
-
-			if (!wall && !tunnel)
+			else if (!tunnel)
 			{
-				entityDirection = reqDirection;
-			}
+				this.reqDirection = getRandomDirection();
+				wall = wallCollision(reqDirection);
 
+				if (!wall)
+				{
+					entityDirection = reqDirection;
+				}
+			}
 		}
 
 		// sets the speed values ​​depending on the direction the entity should move
@@ -72,24 +78,29 @@ public class EntityEnemy extends Entity
 
 	private Direction deadEndDirection()
 	{
-		if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER
-				&& map[m_y][m_x - 1] < Map.SNACK_NUMBER)
+		boolean upBlocked = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
+		boolean downBlocked = map[m_y + 1][m_x] < Map.SNACK_NUMBER;
+		boolean leftBlocked = map[m_y][m_x - 1] < Map.SNACK_NUMBER;
+		boolean rightBlocked = map[m_y][m_x + 1] < Map.SNACK_NUMBER;
+
+		if (upBlocked && downBlocked && leftBlocked && !rightBlocked)
 		{
 			return Direction.RIGHT;
-		} else if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] < Map.SNACK_NUMBER
-				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
+		}
+		else if (upBlocked && downBlocked && !leftBlocked && rightBlocked)
 		{
 			return Direction.LEFT;
-		} else if (map[m_y + 1][m_x] < Map.SNACK_NUMBER && map[m_y][m_x - 1] < Map.SNACK_NUMBER
-				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
+		}
+		else if (!upBlocked && downBlocked && leftBlocked && rightBlocked)
 		{
 			return Direction.UP;
-		} else if (map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y][m_x - 1] < Map.SNACK_NUMBER
-				&& map[m_y][m_x + 1] < Map.SNACK_NUMBER)
+		}
+		else if (upBlocked && !downBlocked && leftBlocked && rightBlocked)
 		{
 			return Direction.DOWN;
 		}
 
+		// shouldn't if level is designed correctly
 		return null;
 	}
 

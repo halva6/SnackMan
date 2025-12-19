@@ -28,10 +28,10 @@ public class GameLoop
 	private static final Logger logger = Logger.getLogger(GameLoop.class.getName());
 	private static final double FIXED_DELTA_TIME = 0.005; // like the fps
 
-	private long lastUpdate = 0;
+	private long lastUpdate;
 	private final Input input;
 
-	private AnimationTimer timer;
+	private final AnimationTimer timer;
 	private double accumulator = 0;
 
 	private GraphicsContext gc;
@@ -82,9 +82,11 @@ public class GameLoop
 				if (lastUpdate == 0)
 				{
 					lastUpdate = now;
+					return; // skip first frame to get proper delta time
 				}
 
 				double deltaTime = (now - lastUpdate) / 1_000_000_000.0;
+				lastUpdate = now;
 
 				if (!pause)
 				{
@@ -98,8 +100,6 @@ public class GameLoop
 				}
 
 				updateGame(deltaTime);
-				lastUpdate = now;
-
 				exitGame();
 			}
 		};
@@ -226,7 +226,7 @@ public class GameLoop
 			}
 
 			// move the player sprite
-			player.moveSprite(playerE.getPosX(), playerE.getPosY(), playerE.getEntitiyDirection(), playerE.isMoving());
+			player.moveSprite(playerE.getPosX(), playerE.getPosY(), playerE.getEntityDirection(), playerE.isMoving());
 
 			// move the enemies
 			for (int i = 0; i < enemyNumber; i++)
@@ -234,7 +234,7 @@ public class GameLoop
 				AnimatedMovingSprite e = this.enemys.get(i);
 				EntityEnemy ee = this.enemeyE.get(i);
 
-				e.moveSprite(ee.getPosX(), ee.getPosY(), ee.getEntitiyDirection(), ee.isMoving());
+				e.moveSprite(ee.getPosX(), ee.getPosY(), ee.getEntityDirection(), ee.isMoving());
 			}
 
 			manageCollision();

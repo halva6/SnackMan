@@ -7,7 +7,7 @@ public abstract class Entity
 {
 	protected int p_x, p_y;
 	protected int m_x, m_y;
-	protected int speed_x, speed_y = 0;
+	protected int speed_x = 0, speed_y = 0;
 	protected Direction reqDirection;
 	protected Direction entityDirection;
 
@@ -36,7 +36,7 @@ public abstract class Entity
 		return p_y;
 	}
 
-	public Direction getEntitiyDirection()
+	public Direction getEntityDirection()
 	{
 		return entityDirection;
 	}
@@ -56,16 +56,16 @@ public abstract class Entity
 		boolean c = false;
 		switch (d)
 		{
-		case Direction.UP:
+		case UP:
 			c = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
 			break;
-		case Direction.DOWN:
+		case DOWN:
 			c = map[m_y + 1][m_x] < Map.SNACK_NUMBER;
 			break;
-		case Direction.LEFT:
+		case LEFT:
 			c = map[m_y][m_x - 1] < Map.SNACK_NUMBER;
 			break;
-		case Direction.RIGHT:
+		case RIGHT:
 			c = map[m_y][m_x + 1] < Map.SNACK_NUMBER;
 			break;
 		}
@@ -75,21 +75,21 @@ public abstract class Entity
 
 	protected void setSpeedInDirection(Direction d)
 	{
-		switch (entityDirection)
+		switch (d)
 		{
-		case Direction.UP:
+		case UP:
 			speed_x = 0;
 			speed_y = -1;
 			break;
-		case Direction.DOWN:
+		case DOWN:
 			speed_x = 0;
 			speed_y = 1;
 			break;
-		case Direction.LEFT:
+		case LEFT:
 			speed_x = -1;
 			speed_y = 0;
 			break;
-		case Direction.RIGHT:
+		case RIGHT:
 			speed_x = 1;
 			speed_y = 0;
 			break;
