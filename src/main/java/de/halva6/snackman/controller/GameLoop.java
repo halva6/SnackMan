@@ -133,7 +133,7 @@ public class GameLoop
 	{
 		String status;
 		String points = "Score: " + scoreCount;
-		String time = String.format("Time: %.1f", playTime);
+		String timeStr = String.format("Time: %.1f", playTime);
 
 		if (win)
 		{
@@ -148,10 +148,11 @@ public class GameLoop
 		if (levelData.currentHighScore() <= scoreCount
 				|| levelData.currentHighScore() == scoreCount && levelData.currentBestTime() >= playTime)
 		{
-			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, (int) Math.round(playTime), levelData.nextLevelAvailable());
+			int timeInt = (int) Math.round(playTime);
+			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, timeInt, levelData.nextLevelAvailable(scoreCount, timeInt));
 		}
 
-		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, time);
+		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, timeStr);
 	}
 
 	// executes all before the first frame will be rendered

@@ -76,8 +76,10 @@ public class LevelOverviewScreen
 					SceneController.gameScene((Node) event.getSource(), levelData);
 				} else
 				{
-					informationText
-							.setText("You must first complete the previous level in " + levelData.time() + " seconds.");
+					LevelData previousLevelData = LevelLoader.loadLevelById(level - 1);
+
+					informationText.setText(
+							"You must first complete the previous level in " + previousLevelData.time() + " seconds.");
 					FadeTransition ft = new FadeTransition(Duration.seconds(5), informationText);
 					ft.setFromValue(1); // start: invisible
 					ft.setToValue(0); // end: visible

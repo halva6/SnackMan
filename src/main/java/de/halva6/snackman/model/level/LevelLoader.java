@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class LevelLoader
@@ -157,9 +158,12 @@ public class LevelLoader
 			setOrCreate(document, levelElement, "highscore", String.valueOf(highscore));
 			setOrCreate(document, levelElement, "bestTimeSeconds", String.valueOf(bestTimeSeconds));
 			setOrCreate(document, levelElement, "locked", String.valueOf(locked));
+			
+			removeWhitespaceNodes(document);
 
 			Transformer transformer = TRANSFORMER_FACTORY.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
 			transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream(file)));
 
@@ -185,6 +189,27 @@ public class LevelLoader
 
 		element.setTextContent(value);
 	}
+	
+	private static void removeWhitespaceNodes(Node node)
+	{
+	    NodeList children = node.getChildNodes();
+
+	    for (int i = children.getLength() - 1; i >= 0; i--)
+	    {
+	        Node child = children.item(i);
+
+	        if (child.getNodeType() == Node.TEXT_NODE &&
+	            child.getTextContent().trim().isEmpty())
+	        {
+	            node.removeChild(child);
+	        }
+	        else if (child.getNodeType() == Node.ELEMENT_NODE)
+	        {
+	            removeWhitespaceNodes(child);
+	        }
+	    }
+	}
+
 
 	public static int[] loadExternalLevelStats(int levelId)
 	{

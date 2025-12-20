@@ -16,8 +16,8 @@
             </enemy>
         </enemies>
 
-        <score>0</score>
-        <bestTimeSeconds>0</bestTimeSeconds>
+        <score>20030</score>
+        <bestTimeSeconds>90</bestTimeSeconds>
 
         <tiles>/level/Level1.csv</tiles>
     </level>
@@ -41,8 +41,8 @@
             </enemy>
         </enemies>
 
-        <score>20030</score>
-        <bestTimeSeconds>100</bestTimeSeconds>
+        <score>19720</score>
+        <bestTimeSeconds>80</bestTimeSeconds>
 
         <tiles>/level/Level2.csv</tiles>
     </level>
@@ -70,8 +70,8 @@
             </enemy>
         </enemies>
 
-        <score>19720</score>
-        <bestTimeSeconds>80</bestTimeSeconds>
+        <score>21070</score>
+        <bestTimeSeconds>90</bestTimeSeconds>
 
         <tiles>/level/Level3.csv</tiles>
     </level>
