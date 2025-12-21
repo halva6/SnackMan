@@ -18,6 +18,7 @@
                </effect>
             </ImageView>
             <Button fx:id="levelSelection" mnemonicParsing="false" onAction="#gotToLevelSelection" styleClass="button-style" text="Levels" />
+            <Button fx:id="randomLevel" mnemonicParsing="false" onAction="#startRandomLevel" styleClass="button-style" text="Random Level" />
             <Button fx:id="exitGame" mnemonicParsing="false" onAction="#quitGame" styleClass="button-style" text="Exit Game" />
          </children>
          <padding>

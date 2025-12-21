@@ -1,6 +1,8 @@
 package de.halva6.snackman.view;
 
 import de.halva6.snackman.controller.SceneController;
+import de.halva6.snackman.model.level.LevelData;
+import de.halva6.snackman.model.level.LevelLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,6 +19,9 @@ public class StartScreenView
 	private Button exitGame;
 	
 	@FXML
+	private Button randomLevel;
+	
+	@FXML
 	private ImageView mainImageView;
 	
 	@FXML
@@ -29,6 +34,14 @@ public class StartScreenView
 	public void quitGame() 
 	{
 		System.exit(0);
+	}
+	
+	@FXML
+	public void startRandomLevel(ActionEvent event) 
+	{
+		
+		LevelData levelData = LevelLoader.loadRandomLevel();
+		SceneController.gameScene((Node) event.getSource(), levelData);
 	}
 	
 	@FXML

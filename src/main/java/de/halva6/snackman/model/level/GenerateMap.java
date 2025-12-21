@@ -12,16 +12,22 @@ public class GenerateMap
 
 	public GenerateMap(int width, int height, String filePath)
 	{
-		this.filePath =  filePath;
+		this.filePath = filePath;
 		this.map = new int[width][height];
-
 		initMap();
+	}
+	
+	// used if no specific map is needed
+	public GenerateMap(int width, int height)
+	{
+		this.filePath = "";
+		this.map = new int[width][height];
+		generateRandomMap();
 	}
 
 	private void initMap()
 	{
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(
-				getClass().getResourceAsStream(filePath))))
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filePath))))
 		{
 			String line;
 			int i = 0;
@@ -57,6 +63,15 @@ public class GenerateMap
 		{
 			System.out.println(Arrays.toString(matrix[i]));
 		}
+	}
+
+	private void generateRandomMap()
+	{
+	}
+	
+	private void setWalls() 
+	{
+		
 	}
 
 	public int[][] getMap()

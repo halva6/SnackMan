@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -111,6 +112,24 @@ public class LevelLoader
 		return parent.getElementsByTagName(tag).item(0).getTextContent().trim();
 	}
 
+	public static LevelData loadRandomLevel()
+	{
+		Random r = new Random();
+		int enemies = r.nextInt(5) + 1; // max 5 enemies
+
+		int[] enemyStartX = new int[enemies];
+		int[] enemyStartY = new int[enemies];
+
+		for (int i = 0; i < enemies; i++)
+		{
+			enemyStartX[i] = 12; //default enemy start position
+			enemyStartY[i] = 11;
+		}
+
+		//the second and third argument is the default start position of the player
+		return new LevelData(-1, 1, 1, enemyStartX, enemyStartY, "", 0, 0, 0, 0);
+	}
+
 	public static void saveExternalLevelStats(int levelId, int highscore, int bestTimeSeconds, int locked)
 	{
 		try
@@ -158,7 +177,7 @@ public class LevelLoader
 			setOrCreate(document, levelElement, "highscore", String.valueOf(highscore));
 			setOrCreate(document, levelElement, "bestTimeSeconds", String.valueOf(bestTimeSeconds));
 			setOrCreate(document, levelElement, "locked", String.valueOf(locked));
-			
+
 			removeWhitespaceNodes(document);
 
 			Transformer transformer = TRANSFORMER_FACTORY.newTransformer();
@@ -189,27 +208,24 @@ public class LevelLoader
 
 		element.setTextContent(value);
 	}
-	
+
 	private static void removeWhitespaceNodes(Node node)
 	{
-	    NodeList children = node.getChildNodes();
+		NodeList children = node.getChildNodes();
 
-	    for (int i = children.getLength() - 1; i >= 0; i--)
-	    {
-	        Node child = children.item(i);
+		for (int i = children.getLength() - 1; i >= 0; i--)
+		{
+			Node child = children.item(i);
 
-	        if (child.getNodeType() == Node.TEXT_NODE &&
-	            child.getTextContent().trim().isEmpty())
-	        {
-	            node.removeChild(child);
-	        }
-	        else if (child.getNodeType() == Node.ELEMENT_NODE)
-	        {
-	            removeWhitespaceNodes(child);
-	        }
-	    }
+			if (child.getNodeType() == Node.TEXT_NODE && child.getTextContent().trim().isEmpty())
+			{
+				node.removeChild(child);
+			} else if (child.getNodeType() == Node.ELEMENT_NODE)
+			{
+				removeWhitespaceNodes(child);
+			}
+		}
 	}
-
 
 	public static int[] loadExternalLevelStats(int levelId)
 	{

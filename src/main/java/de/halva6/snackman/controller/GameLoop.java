@@ -149,16 +149,27 @@ public class GameLoop
 				|| levelData.currentHighScore() == scoreCount && levelData.currentBestTime() >= playTime)
 		{
 			int timeInt = (int) Math.round(playTime);
-			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, timeInt, levelData.nextLevelAvailable(scoreCount, timeInt));
+			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, timeInt,
+					levelData.nextLevelAvailable(scoreCount, timeInt));
 		}
 
-		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points, timeStr);
+		SceneController.gameOverScreenScene(gc.getCanvas(), SceneController.GAME_OVER_FXML_PATH, status, points,
+				timeStr);
 	}
 
 	// executes all before the first frame will be rendered
 	private void awake()
 	{
-		GenerateMap gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.tileFilePath());
+		GenerateMap gm;
+
+		if (levelData.levelId() == -1) // levelId -1 means it is a random level
+		{
+			gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT);
+		} else
+		{
+			gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.tileFilePath());
+		}
+		
 		try
 		{
 			Map map = new Map();
