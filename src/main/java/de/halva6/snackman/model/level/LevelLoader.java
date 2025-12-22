@@ -19,16 +19,37 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Utility class responsible for loading and saving game levels and their
+ * statistics.
+ * <p>
+ * Levels can be loaded from internal XML files or generated randomly. Level
+ * progress, high scores, best times, and locked status are stored externally in
+ * the user's home directory.
+ * </p>
+ */
 public class LevelLoader
 {
+	/** The currently active level number. */
 	public static int levelNumber = 1;
 
+	/** Path to the internal XML file containing level definitions. */
 	private final static String LEVEL_XML_PATH = "/level/leveldata.xml";
+	/** Path to the external XML file storing user level statistics. */
 	private static final String EXTERNAL_STATS_PATH = System.getProperty("user.home") + "/.snackman/levelstats.xml";
 
+	/** Factory for parsing XML documents. */
 	private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+	/** Factory for transforming and saving XML documents. */
 	private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 
+	/**
+	 * Loads a level by its unique ID from the internal XML file.
+	 *
+	 * @param levelId the ID of the level to load
+	 * @return a {@link LevelData} object representing the level, or {@code null} if
+	 *         not found
+	 */
 	public static LevelData loadLevelById(int levelId)
 	{
 		levelNumber = levelId;
@@ -112,6 +133,11 @@ public class LevelLoader
 		return parent.getElementsByTagName(tag).item(0).getTextContent().trim();
 	}
 
+	/**
+	 * Loads a random level with default player and enemy positions.
+	 *
+	 * @return a {@link LevelData} object representing a randomly generated level
+	 */
 	public static LevelData loadRandomLevel()
 	{
 		Random r = new Random();
@@ -122,14 +148,23 @@ public class LevelLoader
 
 		for (int i = 0; i < enemies; i++)
 		{
-			enemyStartX[i] = 12; //default enemy start position
+			enemyStartX[i] = 12; // default enemy start position
 			enemyStartY[i] = 11;
 		}
 
-		//the second and third argument is the default start position of the player
+		// the second and third argument is the default start position of the player
 		return new LevelData(-1, 1, 1, enemyStartX, enemyStartY, "", 0, 0, 0, 0);
 	}
 
+	/**
+	 * Saves external statistics for a level, such as highscore, best time, and
+	 * locked status.
+	 *
+	 * @param levelId         the ID of the level
+	 * @param highscore       the high score achieved
+	 * @param bestTimeSeconds the best time in seconds
+	 * @param locked          0 if unlocked, 1 if locked
+	 */
 	public static void saveExternalLevelStats(int levelId, int highscore, int bestTimeSeconds, int locked)
 	{
 		try
@@ -227,6 +262,13 @@ public class LevelLoader
 		}
 	}
 
+	/**
+	 * Loads external statistics for a specific level.
+	 *
+	 * @param levelId the ID of the level
+	 * @return an int array containing [0] = highscore, [1] = bestTimeSeconds, [2] =
+	 *         locked status
+	 */
 	public static int[] loadExternalLevelStats(int levelId)
 	{
 		int[] result = new int[] { 0, 0, 0 }; // [0] = highscore, [1] = time
@@ -268,6 +310,13 @@ public class LevelLoader
 		return result;
 	}
 
+	/**
+	 * Loads external statistics for all levels.
+	 *
+	 * @param numberOfLevels the total number of levels
+	 * @return a 2D array where each row corresponds to a level and columns are [0]
+	 *         = highscore, [1] = bestTimeSeconds, [2] = locked status
+	 */
 	public static int[][] loadAllExternalLevelStats(int numberOfLevels)
 	{
 		int[][] result = new int[numberOfLevels][3];

@@ -16,20 +16,46 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * The {@code SceneController} is responsible for switching and initializing
+ * different JavaFX scenes of the application, such as the start screen, game
+ * scene, and game over screen.
+ *
+ * All methods are static and operate on the current {@link Stage} derived from
+ * a given source {@link Node}.
+ */
 public class SceneController
 {
+	/** Logger used for reporting scene loading errors. */
 	private static final Logger logger = Logger.getLogger(SceneController.class.getName());
+
+	/** FXML path for the start screen scene. */
 	public static final String START_SCREEN_FXML_PATH = "/fxml/StartScreen.fxml";
+	/** FXML path for the game over screen scene. */
 	public static final String GAME_OVER_FXML_PATH = "/fxml/GameOverScreen.fxml";
+	/** FXML path for the level overview scene. */
 	public static final String LEVEL_OVERVIEW_FXML_PATH = "/fxml/LevelOverview.fxml";
 
-
+	/** Path to the global application stylesheet. */
 	public static final String STYLE_PATH = "/styles/style.css";
 
+	/** Path to the main menu image. */
 	public static final String MAIN_IMAGE = "/img/ui/play_snackman.png";
+	/** Base path for level button images. */
 	public static final String LEVEL_BUTTONS = "/img/ui/";
+	/** Path to the lock image used for locked levels. */
 	public static final String LOCK_IMAGE = "/img/ui/Lock.png";
 
+	/**
+	 * Creates and displays the main game scene.
+	 *
+	 * Initializes input handling, rendering canvas, and starts the game loop using
+	 * the provided {@link LevelData}.
+	 *
+	 * @param sourceNode a node belonging to the current scene, used to retrieve the
+	 *                   {@link Stage}
+	 * @param levelData  the level configuration data to be loaded into the game
+	 */
 	public static void gameScene(Node sourceNode, LevelData levelData)
 	{
 		Group root = new Group();
@@ -54,6 +80,16 @@ public class SceneController
 		stage.show();
 	}
 
+	/**
+	 * Loads and displays a generic scene defined by an FXML file.
+	 *
+	 * This method is mainly used for non-game scenes such as the start screen or
+	 * level overview.
+	 *
+	 * @param sourceNode a node belonging to the current scene, used to retrieve the
+	 *                   {@link Stage}
+	 * @param scenePath  the path to the FXML file of the scene to load
+	 */
 	public static void startScene(Node sourceNode, String scenePath)
 	{
 		try
@@ -76,7 +112,19 @@ public class SceneController
 		}
 	}
 
-
+	/**
+	 * Loads and displays the game over screen.
+	 *
+	 * In addition to loading the FXML scene, this method initializes the
+	 * {@link GameOverScreenView} controller with game result data.
+	 *
+	 * @param sourceNode a node belonging to the current scene, used to retrieve the
+	 *                   {@link Stage}
+	 * @param scenePath  the path to the game over screen FXML file
+	 * @param status     the game result status (e.g. "Victory" or "Defeat")
+	 * @param points     the achieved score
+	 * @param time       the time played
+	 */
 	public static void gameOverScreenScene(Node sourceNode, String scenePath, String status, String points, String time)
 	{
 		try

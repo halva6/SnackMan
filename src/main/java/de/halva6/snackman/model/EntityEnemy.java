@@ -5,17 +5,41 @@ import java.util.Random;
 import de.halva6.snackman.controller.Controller;
 import de.halva6.snackman.view.Map;
 
+/**
+ * Represents an enemy entity in the game (e.g., a ghost).
+ * <p>
+ * The enemy moves autonomously based on simple AI rules: it chooses random
+ * directions unless it encounters a dead end, in which case it
+ * deterministically selects the only open path.
+ * </p>
+ */
 public class EntityEnemy extends Entity
 {
 	// random values
 	private final Random random = new Random();
 
+	/**
+	 * Creates a new enemy entity at the specified map coordinates.
+	 *
+	 * The initial direction is randomly chosen.
+	 *
+	 * @param m_x the initial x-position on the map grid
+	 * @param m_y the initial y-position on the map grid
+	 * @param map the map data used for collision detection
+	 */
 	public EntityEnemy(int m_x, int m_y, int[][] map)
 	{
 		super(m_x, m_y, map);
 		this.entityDirection = getRandomDirection();
 	}
 
+	/**
+	 * Updates the enemy's position and movement each frame.
+	 * <p>
+	 * The enemy chooses a new direction when it reaches a grid intersection. It can
+	 * detect tunnels (corridors) and handles dead ends to avoid getting stuck.
+	 * </p>
+	 */
 	@Override
 	public void move()
 	{
@@ -44,8 +68,7 @@ public class EntityEnemy extends Entity
 				{
 					entityDirection = newDirection;
 				}
-			}
-			else if (!tunnel)
+			} else if (!tunnel)
 			{
 				this.reqDirection = getRandomDirection();
 				wall = wallCollision(reqDirection);
@@ -70,12 +93,27 @@ public class EntityEnemy extends Entity
 		this.p_y += speed_y;
 	}
 
+	/**
+	 * Returns a random direction from the {@link Direction} enum.
+	 *
+	 * @return a randomly chosen movement direction
+	 */
 	private Direction getRandomDirection()
 	{
 		int r = random.nextInt(Direction.values().length);
 		return Direction.values()[r];
 	}
 
+	/**
+	 * Determines the correct movement direction if the enemy is in a dead end.
+	 * <p>
+	 * Checks which surrounding tiles are blocked and returns the only open path.
+	 * Returns {@code null} if no dead-end situation is detected.
+	 * </p>
+	 *
+	 * @return the new direction to move in a dead-end situation, or {@code null} if
+	 *         none
+	 */
 	private Direction deadEndDirection()
 	{
 		boolean upBlocked = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
@@ -86,16 +124,13 @@ public class EntityEnemy extends Entity
 		if (upBlocked && downBlocked && leftBlocked && !rightBlocked)
 		{
 			return Direction.RIGHT;
-		}
-		else if (upBlocked && downBlocked && !leftBlocked && rightBlocked)
+		} else if (upBlocked && downBlocked && !leftBlocked && rightBlocked)
 		{
 			return Direction.LEFT;
-		}
-		else if (!upBlocked && downBlocked && leftBlocked && rightBlocked)
+		} else if (!upBlocked && downBlocked && leftBlocked && rightBlocked)
 		{
 			return Direction.UP;
-		}
-		else if (upBlocked && !downBlocked && leftBlocked && rightBlocked)
+		} else if (upBlocked && !downBlocked && leftBlocked && rightBlocked)
 		{
 			return Direction.DOWN;
 		}

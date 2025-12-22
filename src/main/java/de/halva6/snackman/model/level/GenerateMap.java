@@ -5,19 +5,41 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+/**
+ * Utility class to generate or load a game map.
+ * <p>
+ * Maps can either be loaded from a CSV file or generated randomly. Each map is
+ * represented as a 2D integer array where each value represents a tile type.
+ * </p>
+ */
 public class GenerateMap
 {
 	private final String filePath;
 	private int[][] map;
 
+	/**
+	 * Creates a new map by loading data from a CSV file.
+	 *
+	 * @param width    the width of the map in tiles
+	 * @param height   the height of the map in tiles
+	 * @param filePath the path to the CSV file containing map data
+	 */
 	public GenerateMap(int width, int height, String filePath)
 	{
 		this.filePath = filePath;
 		this.map = new int[width][height];
 		initMap();
 	}
-	
-	// used if no specific map is needed
+
+	/**
+	 * Creates a new map by generating it randomly.
+	 * <p>
+	 * Used if no specific map file is provided.
+	 * </p>
+	 *
+	 * @param width  the width of the map in tiles
+	 * @param height the height of the map in tiles
+	 */
 	public GenerateMap(int width, int height)
 	{
 		this.filePath = "";
@@ -25,6 +47,13 @@ public class GenerateMap
 		generateRandomMap();
 	}
 
+	/**
+	 * Initializes the map by reading values from a CSV file.
+	 * <p>
+	 * Each line in the CSV file corresponds to a row in the map, with values
+	 * separated by commas.
+	 * </p>
+	 */
 	private void initMap()
 	{
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filePath))))
@@ -45,6 +74,12 @@ public class GenerateMap
 		}
 	}
 
+	/**
+	 * Converts an array of strings to an array of integers.
+	 *
+	 * @param arr the array of strings to convert
+	 * @return the resulting array of integers
+	 */
 	private int[] strArrToIntArr(String[] arr)
 	{
 		int[] intArr = new int[arr.length];
@@ -56,6 +91,14 @@ public class GenerateMap
 		return intArr;
 	}
 
+	/**
+	 * Prints the given matrix to the console.
+	 * <p>
+	 * Mainly used for debugging purposes.
+	 * </p>
+	 *
+	 * @param matrix the 2D array to print
+	 */
 	@SuppressWarnings("unused")
 	private void printMatrix(int[][] matrix)
 	{
@@ -65,13 +108,19 @@ public class GenerateMap
 		}
 	}
 
+	/**
+	 * Generates a random map.
+	 */
 	private void generateRandomMap()
 	{
 	}
-	
-	private void setWalls() 
+
+	/**
+	 * Sets wall tiles in the map.
+	 */
+	private void setWalls()
 	{
-		
+
 	}
 
 	public int[][] getMap()

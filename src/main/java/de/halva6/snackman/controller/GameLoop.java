@@ -24,6 +24,11 @@ import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * Manages the entire gameplay. This includes rendering, collision detection,
+ * checking if the game has ended, starting the game, user input, and moving
+ * players and opponents, all within the main loop.
+ */
 public class GameLoop
 {
 	private static final Logger logger = Logger.getLogger(GameLoop.class.getName());
@@ -60,6 +65,28 @@ public class GameLoop
 
 	private final AudioController ac;
 
+	/**
+	 * Creates the main loop of the game.
+	 * 
+	 * <p>
+	 * The main loop is based on an AnimationTimer, which is actually intended for
+	 * creating animations. However, due to its similarity to game loops, the
+	 * {@link javafx.animation.AnimationTimer} can also be used for this purpose, as
+	 * JavaFX handles the thread management and the actual rendering. A Canvas is
+	 * well-suited for displaying custom graphics; it's designed to group many
+	 * different graphics into a single node, which significantly improves
+	 * performance.
+	 * </p>
+	 * 
+	 * @param root      Layout in which the canvas is located, intermediate layer
+	 *                  between the stage and the canvas
+	 * @param input     The input must be "connected" to the stage before this class
+	 *                  is created, so that the physical inputs can be queried at
+	 *                  the end of the game loop.
+	 * @param canvas    the drawing surface on which everything is displayed
+	 * @param levelData includes the parameters for the respective different levels,
+	 *                  e.g. the number of opponents
+	 */
 	public GameLoop(Group root, Input input, Canvas canvas, LevelData levelData)
 	{
 		this.input = input;
@@ -108,11 +135,32 @@ public class GameLoop
 		timer.start();
 	}
 
+	/**
+	 * Stops the game execution depending on the current game state.
+	 *
+	 * <p>
+	 * If the game is over, the game timer is stopped and the {@code gameOver()}
+	 * method is executed on the JavaFX Application Thread using
+	 * {@link javafx.application.Platform#runLater(Runnable)} to ensure thread-safe
+	 * UI updates. Any exceptions occurring during this process are logged.
+	 * </p>
+	 *
+	 * <p>
+	 * If the user chooses to exit the game via the pause menu, the game timer is
+	 * also stopped.
+	 * </p>
+	 *
+	 * <p>
+	 * This method is typically called from the game loop or in response to user
+	 * actions such as pausing or exiting the game.
+	 * </p>
+	 */
 	private void exitGame()
 	{
 		if (gameOver)
 		{
 			timer.stop();
+			//
 			Platform.runLater(() -> {
 				try
 				{
@@ -129,6 +177,12 @@ public class GameLoop
 		}
 	}
 
+	/**
+	 * Starts the Game Over screen and prepares some information so that it can be
+	 * displayed after the game ends. Additionally, a new high score or best time is
+	 * saved to an external XML file, potentially allowing players to unlock new
+	 * levels.
+	 */
 	private void gameOver()
 	{
 		String status;
@@ -158,6 +212,14 @@ public class GameLoop
 	}
 
 	// executes all before the first frame will be rendered
+	/**
+	 * Executed before the first frame.
+	 * 
+	 * <p>
+	 * Initialization of the map and the tilemap, as well as the players and
+	 * enemies.
+	 * </p>
+	 */
 	private void awake()
 	{
 		GenerateMap gm;
@@ -169,7 +231,7 @@ public class GameLoop
 		{
 			gm = new GenerateMap(Controller.WIDTH, Controller.HEIGHT, levelData.tileFilePath());
 		}
-		
+
 		try
 		{
 			Map map = new Map();
@@ -211,9 +273,14 @@ public class GameLoop
 		}
 	}
 
-	// It updates at regular intervals.
-	// It is independent of the frame rate because the frame rate always varies
-	// depending on how many resources the process currently requires.
+	/**
+	 * It updates at regular intervals, regardless of the frame rate.
+	 * 
+	 * <p>
+	 * Since not every device running the program has the same resources, the
+	 * movement of the player and the enemies is adjusted accordingly.
+	 * </p>
+	 */
 	private void fixedUpdate()
 	{
 		playerE.move();
@@ -225,7 +292,19 @@ public class GameLoop
 
 	}
 
-	// updates every frame
+	/**
+	 * Updates with every frame
+	 * 
+	 * <p>
+	 * At the start of each frame, the keyboard input is requested, and the player
+	 * moves accordingly. Enemies are also moved, and collision is checked to
+	 * determine if the player has, for example, just collected a point.
+	 * Additionally, everything is rendered, and the time the user has spent in the
+	 * current game is measured.
+	 * </p>
+	 * 
+	 * @param deltaTime indicates the time difference between each frame
+	 */
 	private void updateGame(double deltaTime)
 	{
 		if (!pause)
@@ -273,6 +352,11 @@ public class GameLoop
 		}
 	}
 
+	/**
+	 * Renders everything related to the game onto a canvas.
+	 * 
+	 * @param deltaTime indicates the time difference between each frame
+	 */
 	private void render(double deltaTime)
 	{
 		// resets the canvas (if not, all moving sprites would be duplicated)
@@ -299,7 +383,10 @@ public class GameLoop
 		timeText.renderText(gc, String.format("Time: %.1f", playTime));
 	}
 
-	// collision detection with the enemies and the dots
+	/**
+	 * Checks if collisions have occurred, either between the player and collectible
+	 * items or between the player and the enemy.
+	 */
 	private void manageCollision()
 	{
 		if (dotCount == 0)
@@ -346,6 +433,17 @@ public class GameLoop
 		}
 	}
 
+	/**
+	 * Toggles the pause state of the application.
+	 * <p>
+	 * The pause mode can be exited either by pressing the pause view's exit button
+	 * or by pressing and releasing the Escape key. An internal escape block
+	 * prevents repeated toggling while the Escape key is held down.
+	 * </p>
+	 * 
+	 * When the pause state changes, the visibility of the pause view is updated
+	 * accordingly.
+	 */
 	private void setPause()
 	{
 		// when the button is pressed to exit the pause screen

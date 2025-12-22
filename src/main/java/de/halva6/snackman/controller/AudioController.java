@@ -2,6 +2,10 @@ package de.halva6.snackman.controller;
 
 import javafx.scene.media.AudioClip;
 
+/**
+ * Loads and provides sounds for the game and ensures that the sounds are
+ * played.
+ */
 public class AudioController
 {
 	private static final String EAT_SOUND_PATH = "/audio/sounds/apple_bite.wav";
@@ -11,6 +15,9 @@ public class AudioController
 	private final AudioClip huntSound;
 	private final AudioClip winSound;
 
+	/**
+	 * Creates an audio controller which loads all the sound.
+	 */
 	public AudioController()
 	{
 		this.eatSound = new AudioClip(getClass().getResource(EAT_SOUND_PATH).toExternalForm());

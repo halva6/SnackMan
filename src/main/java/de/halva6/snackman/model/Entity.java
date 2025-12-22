@@ -3,6 +3,14 @@ package de.halva6.snackman.model;
 import de.halva6.snackman.controller.Controller;
 import de.halva6.snackman.view.Map;
 
+/**
+ * Abstract base class for all movable entities in the game.
+ * <p>
+ * An entity represents any object that can move on the map grid, such as the
+ * player or enemies. It maintains both grid-based and pixel-based positions,
+ * movement speed, and direction handling.
+ * </p>
+ */
 public abstract class Entity
 {
 	protected int p_x, p_y;
@@ -13,6 +21,13 @@ public abstract class Entity
 
 	protected final int[][] map;
 
+	/**
+	 * Creates a new entity at the given map position.
+	 *
+	 * @param m_x the initial x-position on the map grid
+	 * @param m_y the initial y-position on the map grid
+	 * @param map the map data used for collision detection
+	 */
 	public Entity(int m_x, int m_y, int[][] map)
 	{
 		this.m_x = m_x;
@@ -24,6 +39,13 @@ public abstract class Entity
 		this.map = map;
 	}
 
+	/**
+	 * Updates the position and movement of the entity.
+	 * <p>
+	 * This method must be implemented by subclasses to define entity-specific
+	 * movement behavior.
+	 * </p>
+	 */
 	public abstract void move();
 
 	public int getPosX()
@@ -41,20 +63,38 @@ public abstract class Entity
 		return entityDirection;
 	}
 
+	/**
+	 * Sets the requested movement direction.
+	 *
+	 * @param reqDirection the desired direction of movement
+	 */
 	public void setReqDirection(Direction reqDirection)
 	{
 		this.reqDirection = reqDirection;
 	}
 
+	/**
+	 * Indicates whether the entity is currently moving.
+	 *
+	 * @return {@code true} if the entity has a non-zero speed; {@code false}
+	 *         otherwise
+	 */
 	public boolean isMoving()
 	{
 		return !(speed_x == 0 && speed_y == 0);
 	}
 
-	protected boolean wallCollision(Direction d)
+	/**
+	 * Checks whether a collision with a wall would occur when moving in the given
+	 * direction.
+	 *
+	 * @param direction the direction to check for collision
+	 * @return {@code true} if a wall collision would occur; {@code false} otherwise
+	 */
+	protected boolean wallCollision(Direction direction)
 	{
 		boolean c = false;
-		switch (d)
+		switch (direction)
 		{
 		case UP:
 			c = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
@@ -73,6 +113,11 @@ public abstract class Entity
 		return c;
 	}
 
+	/**
+	 * Sets the movement speed values according to the given direction.
+	 *
+	 * @param d the direction in which the entity should move
+	 */
 	protected void setSpeedInDirection(Direction d)
 	{
 		switch (d)

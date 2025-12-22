@@ -4,6 +4,13 @@ import de.halva6.snackman.controller.Controller;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+/**
+ * Represents a static sprite with multiple animation frames.
+ * <p>
+ * The sprite cycles through its frames to create an animation effect. It is
+ * positioned on a map grid, and all frames are assumed to be square.
+ * </p>
+ */
 public class AnimatedStaticSprite extends Sprite
 {
 	private final int framesNumber;
@@ -14,6 +21,15 @@ public class AnimatedStaticSprite extends Sprite
 	protected int currentIndex = 0;
 	protected double elapsedTime = 0;
 
+	/**
+	 * Creates a new animated static sprite at the given map position.
+	 *
+	 * @param imagePaths   the base path of the image files (each frame is suffixed
+	 *                     with an index)
+	 * @param m_x          the x-position on the map grid
+	 * @param m_y          the y-position on the map grid
+	 * @param framesNumber the number of frames in the animation
+	 */
 	public AnimatedStaticSprite(String imagePaths, int m_x, int m_y, int framesNumber)
 	{
 		super(imagePaths + "-" + m_x + "-" + m_y);
@@ -29,6 +45,12 @@ public class AnimatedStaticSprite extends Sprite
 
 	}
 
+	/**
+	 * Loads all animation frames from the given base path.
+	 *
+	 * @param imagePaths the base path of the image files
+	 * @return an array of loaded images
+	 */
 	private Image[] getFrames(String imagePaths)
 	{
 		Image[] frames = new Image[framesNumber];
@@ -39,6 +61,17 @@ public class AnimatedStaticSprite extends Sprite
 		return frames;
 	}
 
+	/**
+	 * Renders the current frame of the animated sprite.
+	 * <p>
+	 * The frame is selected based on the elapsed time and the specified animation
+	 * interval.
+	 * </p>
+	 *
+	 * @param gc            the {@link GraphicsContext} used to draw the sprite
+	 * @param deltaTime     the time elapsed since the last frame (in seconds)
+	 * @param animationTime the total time each frame should be displayed
+	 */
 	public void renderSprite(GraphicsContext gc, double deltaTime, double animationTime)
 	{
 		elapsedTime += deltaTime;
@@ -51,6 +84,11 @@ public class AnimatedStaticSprite extends Sprite
 		return this.currentIndex;
 	}
 
+	/**
+	 * Returns the size of the sprite.
+	 *
+	 * @return the size in pixels
+	 */
 	@Override
 	public double getSize()
 	{
