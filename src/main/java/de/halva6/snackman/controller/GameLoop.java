@@ -199,8 +199,9 @@ public class GameLoop
 			ac.playHuntSound();
 		}
 
-		if (levelData.currentHighScore() <= scoreCount
+		if ((levelData.currentHighScore() <= scoreCount
 				|| levelData.currentHighScore() == scoreCount && levelData.currentBestTime() >= playTime)
+				&& levelData.levelId() != -1) //-1 are the random levels
 		{
 			int timeInt = (int) Math.round(playTime);
 			LevelLoader.saveExternalLevelStats(this.levelData.levelId(), scoreCount, timeInt,

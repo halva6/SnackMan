@@ -20,9 +20,9 @@ import javafx.stage.Stage;
 public class Controller extends Application
 {
 	/** Number of horizontal tiles in the game field. */
-	public static final int WIDTH = 25;
+	public static final int WIDTH = 27;
 	/** Number of vertical tiles in the game field. */
-	public static final int HEIGHT = 25;
+	public static final int HEIGHT = 27;
 	/** Size of a single sprite in pixels. */
 	public static final int SPRITE_SIZE = 32;
 	/** Height of the score display area in pixels. */

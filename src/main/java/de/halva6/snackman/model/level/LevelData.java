@@ -27,8 +27,8 @@ public record LevelData(int levelId, int playerStartX, int playerStartY, int[] e
 	 * time achieved by the player.
 	 * <p>
 	 * Compares the achieved score and time with the target values stored in this
-	 * LevelData. Returns 1 if the next level is available (score &gt;= target score
-	 * and time &lt;= target time), otherwise returns 0.
+	 * LevelData. Returns 1 if the next level is available (score &gt; = target
+	 * score and time &lt;= target time), otherwise returns 0.
 	 * </p>
 	 *
 	 * @param score the score achieved in the level

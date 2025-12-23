@@ -16,8 +16,8 @@
             </enemy>
         </enemies>
 
-        <score>20030</score>
-        <bestTimeSeconds>90</bestTimeSeconds>
+        <score>23780</score>
+        <bestTimeSeconds>125</bestTimeSeconds>
 
         <tiles>/level/Level1.csv</tiles>
     </level>
@@ -32,17 +32,17 @@
 
         <enemies>
             <enemy>
-                <x>12</x>
-                <y>11</y>
+                <x>13</x>
+                <y>12</y>
             </enemy>
             <enemy>
-                <x>12</x>
-                <y>11</y>
+                <x>13</x>
+                <y>12</y>
             </enemy>
         </enemies>
 
-        <score>19720</score>
-        <bestTimeSeconds>80</bestTimeSeconds>
+        <score>23810</score>
+        <bestTimeSeconds>110</bestTimeSeconds>
 
         <tiles>/level/Level2.csv</tiles>
     </level>
@@ -51,22 +51,22 @@
         <levelId>3</levelId>
 
         <playerStartPosition>
-            <x>1</x>
-            <y>1</y>
+            <x>2</x>
+            <y>2</y>
         </playerStartPosition>
 
         <enemies>
             <enemy>
-                <x>12</x>
-                <y>11</y>
+                <x>13</x>
+                <y>12</y>
             </enemy>
             <enemy>
-                <x>12</x>
-                <y>11</y>
+                <x>13</x>
+                <y>12</y>
             </enemy>
             <enemy>
-                <x>12</x>
-                <y>11</y>
+                <x>13</x>
+                <y>12</y>
             </enemy>
         </enemies>
 
