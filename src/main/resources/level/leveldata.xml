@@ -51,8 +51,8 @@
         <levelId>3</levelId>
 
         <playerStartPosition>
-            <x>2</x>
-            <y>2</y>
+            <x>1</x>
+            <y>1</y>
         </playerStartPosition>
 
         <enemies>
@@ -70,7 +70,7 @@
             </enemy>
         </enemies>
 
-        <score>21070</score>
+        <score>21220</score>
         <bestTimeSeconds>90</bestTimeSeconds>
 
         <tiles>/level/Level3.csv</tiles>
