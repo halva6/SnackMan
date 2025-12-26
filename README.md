@@ -1,7 +1,7 @@
 # Snackman
 
 Snackman is a small JavaFX game inspired by Pacman.  
-This project mainly serves as a technical demonstration of a simple game loop, animation handling, and a basic MVC-like structure in JavaFX.
+This project mainly serves as a technical demonstration of a simple game loop, animation handling in JavaFX and Maven.
 
 ## Overview
 
@@ -43,19 +43,4 @@ This separation ensures that game logic is not directly dependent on the frame r
   Collisions are checked between:
   - Player and food tiles (score increase, win condition)
   - Player and enemies (game over)
-
-## MVC Concept (Simplified)
-
-The project follows a simplified MVC approach:
-
-- **Model**  
-  Contains game state and logic (map data, player and enemy entities, movement rules).
-
-- **View**  
-  Responsible for visual representation (sprites, map rendering, score, pause screen).
-
-- **Controller**  
-  Manages the game loop, processes input, updates the model, and triggers rendering.
-
-The separation is not strict but helps to keep logic, rendering, and control flow clearly separated.
 
