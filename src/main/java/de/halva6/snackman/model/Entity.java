@@ -21,6 +21,8 @@ public abstract class Entity
 
 	protected final int[][] map;
 
+	private boolean isOverFlow = false;
+
 	/**
 	 * Creates a new entity at the given map position.
 	 *
@@ -93,24 +95,45 @@ public abstract class Entity
 	 */
 	protected boolean wallCollision(Direction direction)
 	{
+
 		boolean c = false;
-		switch (direction)
+
+		if (!isOverFlow)
 		{
-		case UP:
-			c = map[m_y - 1][m_x] < Map.SNACK_NUMBER;
-			break;
-		case DOWN:
-			c = map[m_y + 1][m_x] < Map.SNACK_NUMBER;
-			break;
-		case LEFT:
-			c = map[m_y][m_x - 1] < Map.SNACK_NUMBER;
-			break;
-		case RIGHT:
-			c = map[m_y][m_x + 1] < Map.SNACK_NUMBER;
-			break;
+			switch (direction)
+			{
+			case UP:
+				c = map[m_y - 1][m_x] < Map.SNACK_NUMBER && map[m_y - 1][m_x] >= 0;
+				break;
+			case DOWN:
+				c = map[m_y + 1][m_x] < Map.SNACK_NUMBER && map[m_y + 1][m_x] >= 0;
+				break;
+			case LEFT:
+				c = map[m_y][m_x - 1] < Map.SNACK_NUMBER && map[m_y][m_x - 1] >= 0;
+				break;
+			case RIGHT:
+				c = map[m_y][m_x + 1] < Map.SNACK_NUMBER && map[m_y][m_x + 1] >= 0;
+				break;
+			}
 		}
 
 		return c;
+	}
+
+	protected void ScreenOverFlow()
+	{
+		if ((m_y >= Controller.HEIGHT - 1 || m_y <= 0) && !this.isOverFlow)
+		{
+			setPos(p_x, (m_y * -1 + (Controller.HEIGHT - 1)) * Controller.SPRITE_SIZE);
+			this.isOverFlow = true;
+		} else if ((m_x >= Controller.WIDTH - 1 || m_x <= 0) && !this.isOverFlow)
+		{
+			setPos((m_x * -1 + (Controller.WIDTH - 1)) * Controller.SPRITE_SIZE, p_y);
+			this.isOverFlow = true;
+		} else
+		{
+			isOverFlow = false;
+		}
 	}
 
 	/**
@@ -139,5 +162,19 @@ public abstract class Entity
 			speed_y = 0;
 			break;
 		}
+	}
+
+	private void setPos(int p_x, int p_y)
+	{
+		this.p_x = p_x;
+		this.p_y = p_y;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Entity [p_x=" + p_x + ", p_y=" + p_y + ", m_x=" + m_x + ", m_y=" + m_y + ", speed_x=" + speed_x
+				+ ", speed_y=" + speed_y + ", reqDirection=" + reqDirection + ", entityDirection=" + entityDirection
+				+ "]";
 	}
 }

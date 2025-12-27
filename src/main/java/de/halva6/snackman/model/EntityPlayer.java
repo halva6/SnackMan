@@ -59,11 +59,22 @@ public class EntityPlayer extends Entity
 			// it checks if there is a wall in front of the player (in the direction of
 			// movement)
 			// if so, the speed is later set to 0
-			frontWall = wallCollision(entityDirection);
+			ScreenOverFlow();
+			
+			try
+			{
+				frontWall = wallCollision(entityDirection);
 
-			// it checks whether there is an obstacle in the desired direction;
-			// if so, the desired direction does not become the entity direction
-			wall = wallCollision(reqDirection);
+				// it checks whether there is an obstacle in the desired direction;
+				// if so, the desired direction does not become the entity direction
+				wall = wallCollision(reqDirection);
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				System.out.println(toString());
+				e.printStackTrace();
+				System.exit(1);
+			}
 
 			if (!wall)
 			{
