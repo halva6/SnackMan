@@ -56,25 +56,17 @@ public class EntityPlayer extends Entity
 			m_x = (int) this.p_x / Controller.SPRITE_SIZE;
 			m_y = (int) this.p_y / Controller.SPRITE_SIZE;
 
+			handleScreenWrap();
+
 			// it checks if there is a wall in front of the player (in the direction of
 			// movement)
 			// if so, the speed is later set to 0
-			ScreenOverFlow();
-			
-			try
-			{
-				frontWall = wallCollision(entityDirection);
 
-				// it checks whether there is an obstacle in the desired direction;
-				// if so, the desired direction does not become the entity direction
-				wall = wallCollision(reqDirection);
-			} catch (Exception e)
-			{
-				// TODO Auto-generated catch block
-				System.out.println(toString());
-				e.printStackTrace();
-				System.exit(1);
-			}
+			frontWall = wallCollision(entityDirection);
+
+			// it checks whether there is an obstacle in the desired direction;
+			// if so, the desired direction does not become the entity direction
+			wall = wallCollision(reqDirection);
 
 			if (!wall)
 			{

@@ -21,7 +21,7 @@ public abstract class Entity
 
 	protected final int[][] map;
 
-	private boolean isOverFlow = false;
+	private boolean hasWrapped = false;
 
 	/**
 	 * Creates a new entity at the given map position.
@@ -87,9 +87,10 @@ public abstract class Entity
 	}
 
 	/**
-	 * Checks whether a collision with a wall would occur when moving in the given
-	 * direction.
-	 *
+	 * Checks whether moving in the given direction would result in a wall
+	 * collision. Collision checks are skipped if the object has just wrapped around
+	 * the screen.
+	 * 
 	 * @param direction the direction to check for collision
 	 * @return {@code true} if a wall collision would occur; {@code false} otherwise
 	 */
@@ -98,7 +99,7 @@ public abstract class Entity
 
 		boolean c = false;
 
-		if (!isOverFlow)
+		if (!hasWrapped)
 		{
 			switch (direction)
 			{
@@ -120,19 +121,23 @@ public abstract class Entity
 		return c;
 	}
 
-	protected void ScreenOverFlow()
+	/**
+	 * Wraps the Entity around the screen when it crosses a screen boundary. If the
+	 * object leaves the screen on one side, it reappears on the opposite side.
+	 */
+	protected void handleScreenWrap()
 	{
-		if ((m_y >= Controller.HEIGHT - 1 || m_y <= 0) && !this.isOverFlow)
+		if ((m_y >= Controller.HEIGHT - 1 || m_y <= 0) && !this.hasWrapped)
 		{
 			setPos(p_x, (m_y * -1 + (Controller.HEIGHT - 1)) * Controller.SPRITE_SIZE);
-			this.isOverFlow = true;
-		} else if ((m_x >= Controller.WIDTH - 1 || m_x <= 0) && !this.isOverFlow)
+			this.hasWrapped = true;
+		} else if ((m_x >= Controller.WIDTH - 1 || m_x <= 0) && !this.hasWrapped)
 		{
 			setPos((m_x * -1 + (Controller.WIDTH - 1)) * Controller.SPRITE_SIZE, p_y);
-			this.isOverFlow = true;
+			this.hasWrapped = true;
 		} else
 		{
-			isOverFlow = false;
+			hasWrapped = false;
 		}
 	}
 

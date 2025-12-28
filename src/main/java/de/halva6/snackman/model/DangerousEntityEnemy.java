@@ -55,6 +55,7 @@ public class DangerousEntityEnemy extends EntityEnemy
 			m_x = this.p_x / Controller.SPRITE_SIZE;
 			m_y = this.p_y / Controller.SPRITE_SIZE;
 
+			handleScreenWrap();
 			// Check if there's a wall in front
 			frontWall = wallCollision(entityDirection);
 
