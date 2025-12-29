@@ -14,6 +14,23 @@ import java.util.Arrays;
  */
 public class GenerateMap
 {
+	private static final int[][] PLUS = { { 4, 15, 6 }, { 15, 15, 15 }, { 5, 15, 7 } };
+
+	private static final int[][] TRIANGLE_NORTH = { { 4, 15, 6 }, { 15, 15, 15 }, { 2, 2, 2 } };
+	private static final int[][] TRIANGLE_SOUTH = { { 1, 1, 1 }, { 15, 15, 15 }, { 5, 15, 7 } };
+	private static final int[][] TRIANGLE_EAST = { { 3, 15, 6 }, { 3, 15, 15 }, { 3, 15, 7 } };
+	private static final int[][] TRIANGLE_WEST = { { 4, 15, 0 }, { 15, 15, 0 }, { 5, 15, 0 } };
+
+	private static final int[][] CORNER_NORTH_EAST = { { 3, 15, 6 }, { 3, 15, 15 }, { 6, 2, 2 } };
+	private static final int[][] CORNER_SOUTH_EAST = { { 7, 1, 1 }, { 3, 15, 15 }, { 3, 15, 7 } };
+	private static final int[][] CORNER_NORTH_WEST = { { 4, 15, 0 }, { 15, 15, 0 }, { 2, 2, 4 } };
+	private static final int[][] CORNER_SOUTH_WEST = { { 1, 1, 5 }, { 15, 15, 0 }, { 5, 15, 0 } };
+
+	private static final int[][] VERTICAL_LINE = { { 3, 15, 0 }, { 3, 15, 0 }, { 3, 15, 0 } };
+	private static final int[][] HORIZONTAL_LINE = { { 1, 1, 1 }, { 15, 15, 15 }, { 2, 2, 2 } };
+
+	private static final int[][] EMPTY = { { -1, -1, -1 }, { -1, -1, -1 }, { -1, -1, -1 } };
+
 	private final String filePath;
 	private int[][] map;
 
@@ -113,14 +130,6 @@ public class GenerateMap
 	 */
 	private void generateRandomMap()
 	{
-	}
-
-	/**
-	 * Sets wall tiles in the map.
-	 */
-	private void setWalls()
-	{
-
 	}
 
 	public int[][] getMap()
